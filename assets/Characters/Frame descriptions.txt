@@ -1,4 +1,0 @@
-1st - 2nd Frame : Throw
-3rd Frame : Idle
-4th Frame : Fish 
-1st : Pulling
