@@ -15,6 +15,7 @@ class Preload extends Phaser.Scene {
     }
 
     create () {
+        console.log("Start Preload")
         this.scene.start('MainMap')
     }
 }
