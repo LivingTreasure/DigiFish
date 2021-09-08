@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="8" tileheight="8" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="TS_Water" tilewidth="8" tileheight="8" tilecount="80" columns="10">
+  <image source="Water/TS_Water.png" width="80" height="64"/>
+ </tileset>
+ <tileset firstgid="81" name="TS_Dirt_Water" tilewidth="8" tileheight="8" tilecount="80" columns="10">
+  <image source="Water/TS_Dirt_Water.png" width="80" height="64"/>
+ </tileset>
+ <tileset firstgid="161" name="water_misc_16x16" tilewidth="8" tileheight="8" tilecount="144" columns="8">
+  <image source="Water/water_misc_16x16.png" width="64" height="144"/>
+ </tileset>
+ <tileset firstgid="305" name="char1_fishingrod_animation_32x32" tilewidth="32" tileheight="32" tilecount="16" columns="4">
+  <image source="Characters/char1_fishingrod_animation_32x32.png" width="128" height="128"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="10" height="10">
+  <data encoding="csv">
+16,16,95,95,25,16,16,16,16,16,
+16,16,95,95,95,25,25,16,16,16,
+16,16,16,95,95,25,25,16,16,16,
+35,22,26,95,95,25,32,33,33,33,
+45,26,26,95,95,25,70,14,14,14,
+77,33,33,113,113,79,80,44,44,14,
+14,14,14,14,14,14,14,14,14,222,
+14,14,14,14,14,14,14,14,14,14,
+14,14,14,14,14,14,14,222,14,14,
+14,14,14,14,14,14,14,14,14,14
+</data>
+ </layer>
+</map>
