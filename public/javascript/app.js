@@ -25,6 +25,12 @@ App.prototype.start = function() {
         scene          : scenes,
         pixelArt        : true,
         backgroundColor : 0x000000,
+        physics: {
+            default: 'arcade',
+            arcade: {
+            debug: true,
+            },
+        },
         scale: {
             // Fit to window
             mode: Phaser.Scale.FIT,

@@ -41,7 +41,23 @@ class MainMap extends Phaser.Scene {
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
-        this.character = this.add.sprite(80, 90, 'character');
+        this.character = this.physics.add.sprite(80, 90, 'character', 1);
+        this.character.setBounce(0, 0);
+        this.character.setSize(15, 25);
+        this.character.body.offset.y = 7;
+        
+        // this.character.setOrigin(0.5, 1);
+
+        this.character.setCollideWorldBounds(true);
+        water.setCollisionByProperty({ collides: true });
+        objs.setCollisionByProperty({ collides: true });
+        this.physics.add.collider(this.character, water);
+        this.physics.add.collider(this.character, objs);
+
+        // this.character.setDepth(10);
+        // this.character.scale = 1;
+        // this.cameras.main.startFollow(this.character);
+        // this.cameras.main.roundPixels = true;
 
         this.anims.create({
             key: 'right',
@@ -80,25 +96,37 @@ class MainMap extends Phaser.Scene {
 
     update () {
         console.log("update")
+        this.character.setVelocityX(0);
+        this.character.setVelocityY(0);
         if (this.cursors.left.isDown)
         {
-            this.character.x = this.character.x - .5;
+            this.character.setVelocityX(-25);
+            this.character.setSize(19,19);
+            this.character.body.offset.y = 7;
+            this.character.body.offset.x = 11;
 
             this.character.anims.play('left', true);
         }
         else if (this.cursors.right.isDown)
         {
-            this.character.x = this.character.x + .5;
+            this.character.setVelocityX(25);
+            this.character.setSize(20, 20);
+            this.character.body.offset.y = 7;
+            this.character.body.offset.x = 1;
 
             this.character.anims.play('right', true);
         }
         else if (this.cursors.down.isDown) {
-            this.character.y = this.character.y + .5;
+            this.character.setVelocityY(25);
+            this.character.setSize(15, 25);
+            this.character.body.offset.y = 7;
 
             this.character.anims.play('down', true);
         }
         else if (this.cursors.up.isDown) {
-            this.character.y = this.character.y - .5;
+            this.character.setVelocityY(-25);
+            this.character.setSize(15, 25);
+            this.character.body.offset.y = 0;
 
             this.character.anims.play('up', true);
         }
