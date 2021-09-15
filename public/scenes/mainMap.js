@@ -24,6 +24,8 @@ class MainMap extends Phaser.Scene {
 
             // load the JSON file
         this.load.tilemapTiledJSON('map', 'assets/json/DigiFishMainMapLong.json')
+
+        //this.createUserInterface();
     }
 
     create () {
@@ -45,6 +47,8 @@ class MainMap extends Phaser.Scene {
         this.character.setBounce(0, 0);
         this.character.setSize(15, 25);
         this.character.body.offset.y = 7;
+
+        this.createUserInterface();
         
         // this.character.setOrigin(0.5, 1);
 
@@ -87,7 +91,8 @@ class MainMap extends Phaser.Scene {
 
         this.anims.create({
             key: 'throw',
-            frames: this.anims.generateFrameNumbers('character', { start: 1, end: 3 }),
+            frames: this.anims.generateFrameNumbers('character', { start: 0, end: 3 }),
+            //frames: [ { key: 'character', frame: 1} ],
             frameRate: 10,
         });
 
@@ -132,6 +137,29 @@ class MainMap extends Phaser.Scene {
         }
         else if (this.cursors.space.isDown) {
             this.character.anims.play('throw', true);
+
+            this.sys.game.time.events.add(Phaser.Timer.SECOND, function () {this.character.anims.play('down', true);});
         }
+    }
+
+    createUserInterface(){
+
+        //Background
+        let x = 215;
+        let y = 10;
+        let w = 100;
+        let h = 140;
+
+        this.interface  = this.add.graphics({x: x, y: y})
+        this.border     = this.add.graphics({x: x, y: y})  
+
+        this.interface.clear();
+        this.interface.fillStyle('0x965D37', 1);
+        this.interface.fillRect(0, 0, w, h);
+
+        this.border.clear();
+        this.border.lineStyle(2, '0x4D6592', 1);
+        this.border.strokeRect(0, 0, w, h);
+
     }
 }
