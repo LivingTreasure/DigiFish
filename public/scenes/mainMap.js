@@ -43,10 +43,12 @@ class MainMap extends Phaser.Scene {
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
-        this.character = this.physics.add.sprite(80, 90, 'character', 1);
+        this.character = this.physics.add.sprite(80, 90, 'character', 0);
         this.character.setBounce(0, 0);
         this.character.setSize(15, 25);
         this.character.body.offset.y = 7;
+
+        this.lineCast = true;
 
         this.createUserInterface();
         
@@ -59,9 +61,10 @@ class MainMap extends Phaser.Scene {
         this.physics.add.collider(this.character, objs);
 
         // this.character.setDepth(10);
-        // this.character.scale = 1;
-        // this.cameras.main.startFollow(this.character);
-        // this.cameras.main.roundPixels = true;
+        this.cameras.main.setZoom(1)
+        this.cameras.main.startFollow(this.character);
+        this.cameras.main.roundPixels = true;
+        // this.cameras.main.zoom = 0.5;
 
         this.anims.create({
             key: 'right',
@@ -72,7 +75,7 @@ class MainMap extends Phaser.Scene {
         
         this.anims.create({
             key: 'down',
-            frames: [ { key: 'character', frame: 1 } ],
+            frames: [ { key: 'character', frame: 0 } ],
             frameRate: 20
         });
 
@@ -91,9 +94,16 @@ class MainMap extends Phaser.Scene {
 
         this.anims.create({
             key: 'throw',
-            frames: this.anims.generateFrameNumbers('character', { start: 0, end: 3 }),
+            frames: this.anims.generateFrameNumbers('character', { frames: [1, 2, 1] }),
             //frames: [ { key: 'character', frame: 1} ],
-            frameRate: 10,
+            frameRate: 5,
+        });
+
+        this.anims.create({
+            key: 'pullout',
+            frames: this.anims.generateFrameNumbers('character', { frames: [1, 2, 0] }),
+            //frames: [ { key: 'character', frame: 1} ],
+            frameRate: 5,
         });
 
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -136,9 +146,15 @@ class MainMap extends Phaser.Scene {
             this.character.anims.play('up', true);
         }
         else if (this.cursors.space.isDown) {
-            this.character.anims.play('throw', true);
+            if(!this.lineCast) {
+                this.character.anims.play('throw', true);
+            } else {
+                this.character.anims.play('pullout', true);
+            }
 
-            this.sys.game.time.events.add(Phaser.Timer.SECOND, function () {this.character.anims.play('down', true);});
+            this.lineCast = !this.lineCast;
+
+            // this.sys.game.time.events.add(Phaser.Timer.SECOND, function () {this.character.anims.play('down', true);});
         }
     }
 
@@ -151,15 +167,18 @@ class MainMap extends Phaser.Scene {
         let h = 140;
 
         this.interface  = this.add.graphics({x: x, y: y})
-        this.border     = this.add.graphics({x: x, y: y})  
+        this.border     = this.add.graphics({x: x, y: y})
 
         this.interface.clear();
         this.interface.fillStyle('0x965D37', 1);
         this.interface.fillRect(0, 0, w, h);
+        this.interface.fixedToCamera = true;
+        this.interface.setScrollFactor(0)
 
         this.border.clear();
         this.border.lineStyle(2, '0x4D6592', 1);
         this.border.strokeRect(0, 0, w, h);
-
+        this.border.fixedToCamera = true;
+        this.border.setScrollFactor(0)
     }
 }

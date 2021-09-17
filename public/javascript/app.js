@@ -24,7 +24,7 @@ App.prototype.start = function() {
         height          : 160,
         scene          : scenes,
         pixelArt        : true,
-        backgroundColor : 0x000000,
+        backgroundColor : 0xC9D358,
         physics: {
             default: 'arcade',
             arcade: {
