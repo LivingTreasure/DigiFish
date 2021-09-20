@@ -1,3 +1,7 @@
+var timedEvent;
+var text;
+
+
 class MainMap extends Phaser.Scene {
     //THIS SCENE IS THE MAIN SCREEN
     constructor () {
@@ -10,6 +14,7 @@ class MainMap extends Phaser.Scene {
 
         this.CONFIG = this.sys.game.CONFIG;
     }
+
 
     preload () {
 
@@ -25,7 +30,10 @@ class MainMap extends Phaser.Scene {
             // load the JSON file
         this.load.tilemapTiledJSON('map', 'assets/json/DigiFishMainMapLong.json')
 
-        //this.createUserInterface();
+        this.load.spritesheet('fish', 'assets/Images/other/FishIcons_n_junk_16x16.png', {
+            frameWidth: 16,
+            frameHeight: 16
+        })
     }
 
     create () {
@@ -43,7 +51,7 @@ class MainMap extends Phaser.Scene {
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
-        this.character = this.physics.add.sprite(80, 90, 'character', 0);
+        this.character = this.physics.add.sprite(80, 200, 'character', 0);
         this.character.setBounce(0, 0);
         this.character.setSize(15, 25);
         this.character.body.offset.y = 7;
@@ -54,7 +62,7 @@ class MainMap extends Phaser.Scene {
         
         // this.character.setOrigin(0.5, 1);
 
-        this.character.setCollideWorldBounds(true);
+        //this.character.setCollideWorldBounds(true);
         water.setCollisionByProperty({ collides: true });
         objs.setCollisionByProperty({ collides: true });
         this.physics.add.collider(this.character, water);
@@ -107,6 +115,21 @@ class MainMap extends Phaser.Scene {
         });
 
         this.cursors = this.input.keyboard.createCursorKeys();
+
+        this.input.keyboard.on('keydown-SPACE', function () {
+            this.fish = this.physics.add.sprite(80, 285, 'fish', 0);
+            //timedEvent = this.time.delayedCall(3000, this.fishDisappear(), [], this);
+            this.time.addEvent({
+                delay: 6000,
+                callback: ()=>{
+                    this.fish.visible = false;
+                    this.fish.active = false;
+                },
+                loop: true
+            })
+        }, this);
+
+
     }
 
     update () {
@@ -153,9 +176,12 @@ class MainMap extends Phaser.Scene {
             }
 
             this.lineCast = !this.lineCast;
-
-            // this.sys.game.time.events.add(Phaser.Timer.SECOND, function () {this.character.anims.play('down', true);});
         }
+    }
+
+    fishDisappear(){
+        this.fish.visible = false;
+        this.fish.active = false;
     }
 
     createUserInterface(){
