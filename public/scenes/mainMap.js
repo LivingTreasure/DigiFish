@@ -5,7 +5,7 @@ var text;
 class MainMap extends Phaser.Scene {
     //THIS SCENE IS THE MAIN SCREEN
     constructor () {
-        
+
         super({key: 'MainMap', active: false})
     }
 
@@ -34,6 +34,10 @@ class MainMap extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16
         })
+        this.load.spritesheet('walking', 'assets/Images/Tiny Adventure Pack/Character v2/Char1/Char1_walk_16px.png', {
+            frameWidth: 16,
+            frameHeight: 16
+        })
     }
 
     create () {
@@ -59,7 +63,7 @@ class MainMap extends Phaser.Scene {
         this.lineCast = true;
 
         this.createUserInterface();
-        
+
         // this.character.setOrigin(0.5, 1);
 
         //this.character.setCollideWorldBounds(true);
@@ -76,28 +80,26 @@ class MainMap extends Phaser.Scene {
 
         this.anims.create({
             key: 'right',
-            frames: [ { key: 'character', frame: 12 } ],
-            frameRate: 10,
-            repeat: -1
+            frames: this.anims.generateFrameNumbers('walking', { frames: [12, 13, 14, 15] }),
+            frameRate: 5,
         });
-        
+
         this.anims.create({
             key: 'down',
-            frames: [ { key: 'character', frame: 0 } ],
-            frameRate: 20
+            frames: this.anims.generateFrameNumbers('walking', { frames: [0, 1, 2, 3] }),
+            frameRate: 5
         });
 
         this.anims.create({
             key: 'up',
-            frames: [ { key: 'character', frame: 9 } ],
-            frameRate: 20
+            frames: this.anims.generateFrameNumbers('walking', { frames: [8, 9, 10, 11] }),
+            frameRate: 5
         });
-        
+
         this.anims.create({
             key: 'left',
-            frames: [ { key: 'character', frame: 4 } ],
-            frameRate: 10,
-            repeat: -1
+            frames: this.anims.generateFrameNumbers('walking', { frames: [4, 5, 6, 7] }),
+            frameRate: 5,
         });
 
         this.anims.create({
