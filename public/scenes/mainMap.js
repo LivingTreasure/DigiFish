@@ -58,7 +58,7 @@ class MainMap extends Phaser.Scene {
         this.character = this.physics.add.sprite(80, 200, 'character', 0);
         this.character.setBounce(0, 0);
         this.character.setSize(16, 24);
-        this.character.body.offset.y = 7;
+        this.character.body.offset.y = 0;
 
         this.lineCast = true;
 
@@ -78,24 +78,28 @@ class MainMap extends Phaser.Scene {
         this.cameras.main.roundPixels = true;
         // this.cameras.main.zoom = 0.5;
 
+//walking right animation (EC)
         this.anims.create({
             key: 'right',
             frames: this.anims.generateFrameNumbers('walking', { frames: [12, 13, 14, 15] }),
             frameRate: 5,
         });
 
+//walking down animation (EC)
         this.anims.create({
             key: 'down',
             frames: this.anims.generateFrameNumbers('walking', { frames: [0, 1, 2, 3] }),
             frameRate: 5
         });
 
+//walking up animation (EC)
         this.anims.create({
             key: 'up',
             frames: this.anims.generateFrameNumbers('walking', { frames: [8, 9, 10, 11] }),
             frameRate: 5
         });
 
+//walking left animation (EC)
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('walking', { frames: [4, 5, 6, 7] }),
@@ -105,7 +109,6 @@ class MainMap extends Phaser.Scene {
         this.anims.create({
             key: 'throw',
             frames: this.anims.generateFrameNumbers('character', { frames: [1, 2, 1] }),
-            //frames: [ { key: 'character', frame: 1} ],
             frameRate: 5,
         });
 
@@ -166,6 +169,8 @@ class MainMap extends Phaser.Scene {
         }
         else if (this.cursors.space.isDown) {
             if(!this.lineCast) {
+                this.character.setSize(16, 24);
+                this.character.body.offset.y = 4;
                 this.character.anims.play('throw', true);
             } else {
                 this.character.anims.play('pullout', true);
