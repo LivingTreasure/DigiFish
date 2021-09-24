@@ -57,7 +57,7 @@ class MainMap extends Phaser.Scene {
 
         this.character = this.physics.add.sprite(80, 200, 'character', 0);
         this.character.setBounce(0, 0);
-        this.character.setSize(15, 25);
+        this.character.setSize(16, 24);
         this.character.body.offset.y = 7;
 
         this.lineCast = true;
@@ -140,33 +140,27 @@ class MainMap extends Phaser.Scene {
         this.character.setVelocityY(0);
         if (this.cursors.left.isDown)
         {
-            this.character.setVelocityX(-25);
-            this.character.setSize(19,19);
-            this.character.body.offset.y = 7;
-            this.character.body.offset.x = 11;
+            this.character.setVelocityX(-32);
+            this.character.setSize(16,16);
 
             this.character.anims.play('left', true);
         }
         else if (this.cursors.right.isDown)
         {
-            this.character.setVelocityX(25);
-            this.character.setSize(20, 20);
-            this.character.body.offset.y = 7;
-            this.character.body.offset.x = 1;
+            this.character.setVelocityX(32);
+            this.character.setSize(16, 16);
 
             this.character.anims.play('right', true);
         }
         else if (this.cursors.down.isDown) {
-            this.character.setVelocityY(25);
-            this.character.setSize(15, 25);
-            this.character.body.offset.y = 7;
+            this.character.setVelocityY(32);
+            this.character.setSize(16, 16);
 
             this.character.anims.play('down', true);
         }
         else if (this.cursors.up.isDown) {
-            this.character.setVelocityY(-25);
-            this.character.setSize(15, 25);
-            this.character.body.offset.y = 0;
+            this.character.setVelocityY(-32);
+            this.character.setSize(16, 16);
 
             this.character.anims.play('up', true);
         }
