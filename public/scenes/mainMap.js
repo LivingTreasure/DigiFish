@@ -22,6 +22,7 @@ class MainMap extends Phaser.Scene {
         this.load.image('grass', 'assets/images/water/TS_Water.png')
         this.load.image('extra', 'assets/images/water/water_misc_16x16.png')
         this.load.image('tree', 'assets/images/other/Palmtree_n_fruits.png')
+        this.load.image('buildings','assets/Serene Village/16x16_black_outline/editedoutside.png' )
         this.load.spritesheet('character', 'assets/characters/char1_fishingrod_animation_32x32.png', {
             frameWidth: 32,
             frameHeight: 32
@@ -48,8 +49,9 @@ class MainMap extends Phaser.Scene {
         const tileset3 = map.addTilesetImage('water_misc_16x16','extra')
         const tileset4 = map.addTilesetImage('Palmtree_n_fruits','tree')
         const tileset5 = map.addTilesetImage('Character','character')
+        const tileset6 = map.addTilesetImage('buildings','buildings')
 
-        const allLayers = [tileset, tileset2, tileset3, tileset4]
+        const allLayers = [tileset, tileset2, tileset3, tileset4, tileset6]
 
         var ground = map.createLayer('Ground', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
@@ -143,26 +145,26 @@ class MainMap extends Phaser.Scene {
         this.character.setVelocityY(0);
         if (this.cursors.left.isDown)
         {
-            this.character.setVelocityX(-32);
+            this.character.setVelocityX(-48);
             this.character.setSize(16,16);
 
             this.character.anims.play('left', true);
         }
         else if (this.cursors.right.isDown)
         {
-            this.character.setVelocityX(32);
+            this.character.setVelocityX(48);
             this.character.setSize(16, 16);
 
             this.character.anims.play('right', true);
         }
         else if (this.cursors.down.isDown) {
-            this.character.setVelocityY(32);
+            this.character.setVelocityY(48);
             this.character.setSize(16, 16);
 
             this.character.anims.play('down', true);
         }
         else if (this.cursors.up.isDown) {
-            this.character.setVelocityY(-32);
+            this.character.setVelocityY(-48);
             this.character.setSize(16, 16);
 
             this.character.anims.play('up', true);
