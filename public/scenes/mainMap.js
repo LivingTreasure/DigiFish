@@ -136,6 +136,8 @@ class MainMap extends Phaser.Scene {
             })
         }, this);
 
+        var column = new uiWidgets.Column()
+
 
     }
 

@@ -15,6 +15,7 @@
 
     <!--LIBRARIES -->
     <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script src="javascript/phaser-ui-tools.js"></script>
 
     <!--PREFABS -->
     <script src="prefabs/helper.js"></script>
