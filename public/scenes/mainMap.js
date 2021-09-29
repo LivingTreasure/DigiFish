@@ -39,6 +39,11 @@ class MainMap extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16
         })
+
+        // Audio
+        this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
+
+        this.load.audio('music', 'assets/Audio/Reality.mp3');
     }
 
     create () {
@@ -63,6 +68,19 @@ class MainMap extends Phaser.Scene {
         this.character.body.offset.y = 0;
 
         this.lineCast = true;
+
+        this.waterDrop = this.sound.add('water_drop');
+        this.music = this.sound.add('music');
+        var musicConfig = {
+          mute: false,
+          volume: 1,
+          rate: 1,
+          detune: 0,
+          seek: 0,
+          loop: false,
+          delay: 0
+        }
+        this.music.play(musicConfig);
 
         this.createUserInterface();
 
@@ -136,8 +154,6 @@ class MainMap extends Phaser.Scene {
             })
         }, this);
 
-        var column = new uiWidgets.Column()
-
 
     }
 
@@ -176,6 +192,7 @@ class MainMap extends Phaser.Scene {
                 this.character.setSize(16, 24);
                 this.character.body.offset.y = 4;
                 this.character.anims.play('throw', true);
+                this.waterDrop.play();
             } else {
                 this.character.anims.play('pullout', true);
             }
