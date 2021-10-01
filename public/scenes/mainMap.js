@@ -62,7 +62,7 @@ class MainMap extends Phaser.Scene {
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
-        this.character = this.physics.add.sprite(208, 260, 'character', 0);
+        this.character = this.physics.add.sprite(280, 264, 'character', 0);
         this.character.setBounce(0, 0);
         this.character.setSize(16, 24);
         this.character.body.offset.y = 0;
@@ -142,7 +142,7 @@ class MainMap extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.input.keyboard.on('keydown-SPACE', function () {
-            this.fish = this.physics.add.sprite(160, 400, 'fish', 0);
+            this.fish = this.physics.add.sprite(240, 400, 'fish', 0);
             //timedEvent = this.time.delayedCall(3000, this.fishDisappear(), [], this);
             this.time.addEvent({
                 delay: 6000,
