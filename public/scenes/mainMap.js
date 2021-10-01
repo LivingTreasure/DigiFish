@@ -73,11 +73,11 @@ class MainMap extends Phaser.Scene {
         this.music = this.sound.add('music');
         var musicConfig = {
           mute: false,
-          volume: 1,
+          volume: .5,
           rate: 1,
           detune: 0,
           seek: 0,
-          loop: false,
+          loop: true,
           delay: 0
         }
         this.music.play(musicConfig);
