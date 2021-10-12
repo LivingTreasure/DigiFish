@@ -35,6 +35,13 @@ class MainMap extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16
         })
+
+
+        this.load.spritesheet('uiContainers', 'assets/Images/GUI_Pack/Containers/Frames_BrownBG_32x32export.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
         this.load.spritesheet('walking', 'assets/Images/Tiny Adventure Pack/Character v2/Char1/Char1_walk_16px.png', {
             frameWidth: 16,
             frameHeight: 16
@@ -98,28 +105,28 @@ class MainMap extends Phaser.Scene {
         this.cameras.main.roundPixels = true;
         // this.cameras.main.zoom = 0.5;
 
-//walking right animation (EC)
+        //walking right animation (EC)
         this.anims.create({
             key: 'right',
             frames: this.anims.generateFrameNumbers('walking', { frames: [12, 13, 14, 15] }),
             frameRate: 5,
         });
 
-//walking down animation (EC)
+        //walking down animation (EC)
         this.anims.create({
             key: 'down',
             frames: this.anims.generateFrameNumbers('walking', { frames: [0, 1, 2, 3] }),
             frameRate: 5
         });
 
-//walking up animation (EC)
+        //walking up animation (EC)
         this.anims.create({
             key: 'up',
             frames: this.anims.generateFrameNumbers('walking', { frames: [8, 9, 10, 11] }),
             frameRate: 5
         });
 
-//walking left animation (EC)
+        //walking left animation (EC)
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('walking', { frames: [4, 5, 6, 7] }),
@@ -143,7 +150,6 @@ class MainMap extends Phaser.Scene {
 
         this.input.keyboard.on('keydown-SPACE', function () {
             this.fish = this.physics.add.sprite(240, 400, 'fish', 0);
-            //timedEvent = this.time.delayedCall(3000, this.fishDisappear(), [], this);
             this.time.addEvent({
                 delay: 6000,
                 callback: ()=>{
@@ -209,7 +215,7 @@ class MainMap extends Phaser.Scene {
     createUserInterface(){
 
         //Background
-        let x = 215;
+        let x = 216;
         let y = 10;
         let w = 100;
         let h = 140;
@@ -228,5 +234,61 @@ class MainMap extends Phaser.Scene {
         this.border.strokeRect(0, 0, w, h);
         this.border.fixedToCamera = true;
         this.border.setScrollFactor(0)
+
+        this.rodIcon1 = this.add.sprite(236, 36, 'uiContainers', 0);
+        this.rodIcon1.fixedToCamera = true;
+        this.rodIcon1.setScrollFactor(0)
+
+        this.rodIcon2 = this.add.sprite(266, 36, 'uiContainers', 0);
+        this.rodIcon2.fixedToCamera = true;
+        this.rodIcon2.setScrollFactor(0)
+
+        this.rodIcon3 = this.add.sprite(295, 36, 'uiContainers', 0);
+        this.rodIcon3.fixedToCamera = true;
+        this.rodIcon3.setScrollFactor(0)
+
+        this.bait1 = this.add.sprite(236, 76, 'uiContainers', 0);
+        this.bait1.fixedToCamera = true;
+        this.bait1.setScrollFactor(0)
+
+        this.bait2 = this.add.sprite(266, 76, 'uiContainers', 0);
+        this.bait2.fixedToCamera = true;
+        this.bait2.setScrollFactor(0)
+
+        this.bait3 = this.add.sprite(295, 76, 'uiContainers', 0);
+        this.bait3.fixedToCamera = true;
+        this.bait3.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(231, 136, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(254, 136, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(277, 136, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(300, 136, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory2 = this.add.sprite(231, 112, 'uiContainers', 24);
+        this.inventory2.fixedToCamera = true;
+        this.inventory2.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(254, 112, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(277, 112, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(300, 112, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
     }
 }
