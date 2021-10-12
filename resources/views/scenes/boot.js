@@ -11,8 +11,6 @@ class Boot extends Phaser.Scene {
     }
 
     preload () {
-        //this.load.bitmapFont('ClickPixel', 'assets/GUI_Pack/Fonts/Click_0.png', 'assets/GUI_Pack/Fonts/click.xml')
-        this.load.bitmapFont('ClickPixel', 'assets/GUI_Pack/Fonts/WhitePeaberry.png', 'assets/GUI_Pack/Fonts/WhitePeaberry.xml')
 
     }
 
