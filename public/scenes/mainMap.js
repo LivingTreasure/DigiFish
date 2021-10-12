@@ -31,22 +31,6 @@ class MainMap extends Phaser.Scene {
             // load the JSON file
         this.load.tilemapTiledJSON('map', 'assets/json/DigiFishMainMapLong.json')
 
-        this.load.spritesheet('fish', 'assets/Images/other/FishIcons_n_junk_16x16.png', {
-            frameWidth: 16,
-            frameHeight: 16
-        })
-
-
-        this.load.spritesheet('uiContainers', 'assets/Images/GUI_Pack/Containers/Frames_BrownBG_32x32export.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('walking', 'assets/Images/Tiny Adventure Pack/Character v2/Char1/Char1_walk_16px.png', {
-            frameWidth: 16,
-            frameHeight: 16
-        })
-
         // Audio
         this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
 
@@ -146,12 +130,24 @@ class MainMap extends Phaser.Scene {
             frameRate: 5,
         });
 
+        this.anims.create({
+            key: 'hookIconSwitch',
+            frames: this.anims.generateFrameNumbers('uiContainers', { frames: [6] }),
+            frameRate: 500,
+        });
+
+        this.anims.create({
+            key: 'hookIconSwitchBack',
+            frames: this.anims.generateFrameNumbers('uiContainers', { frames: [0] }),
+            frameRate: 500,
+        });
+
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.input.keyboard.on('keydown-SPACE', function () {
-            this.fish = this.physics.add.sprite(240, 400, 'fish', 0);
+            this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', Phaser.Math.Between(18, 126));
             this.time.addEvent({
-                delay: 6000,
+                delay: Phaser.Math.Between(3000, 4000),
                 callback: ()=>{
                     this.fish.visible = false;
                     this.fish.active = false;
@@ -159,6 +155,8 @@ class MainMap extends Phaser.Scene {
                 loop: true
             })
         }, this);
+
+
 
 
     }
@@ -205,11 +203,36 @@ class MainMap extends Phaser.Scene {
 
             this.lineCast = !this.lineCast;
         }
+    }  
+
+    resetIcon1(){
+        this.hookIcon2.play('hookIconSwitchBack');
+        this.hookIcon3.play('hookIconSwitchBack');
     }
 
-    fishDisappear(){
-        this.fish.visible = false;
-        this.fish.active = false;
+    resetIcon2(){
+        this.hookIcon1.play('hookIconSwitchBack');
+        this.hookIcon3.play('hookIconSwitchBack');
+    }
+
+    resetIcon3(){
+        this.hookIcon2.play('hookIconSwitchBack');
+        this.hookIcon1.play('hookIconSwitchBack');
+    }
+
+    resetIcon4(){
+        this.baitIcon2.play('hookIconSwitchBack');
+        this.baitIcon3.play('hookIconSwitchBack');
+    }
+
+    resetIcon5(){
+        this.baitIcon1.play('hookIconSwitchBack');
+        this.baitIcon3.play('hookIconSwitchBack');
+    }
+
+    resetIcon6(){
+        this.baitIcon2.play('hookIconSwitchBack');
+        this.baitIcon1.play('hookIconSwitchBack');
     }
 
     createUserInterface(){
@@ -227,7 +250,7 @@ class MainMap extends Phaser.Scene {
         this.interface.fillStyle('0x965D37', 1);
         this.interface.fillRect(0, 0, w, h);
         this.interface.fixedToCamera = true;
-        this.interface.setScrollFactor(0)
+        this.interface.setScrollFactor(0);
 
         this.border.clear();
         this.border.lineStyle(2, '0x4D6592', 1);
@@ -235,27 +258,127 @@ class MainMap extends Phaser.Scene {
         this.border.fixedToCamera = true;
         this.border.setScrollFactor(0)
 
-        this.rodIcon1 = this.add.sprite(236, 36, 'uiContainers', 0);
-        this.rodIcon1.fixedToCamera = true;
-        this.rodIcon1.setScrollFactor(0)
+        this.invTitle = new Text(
+            this,
+            265,
+            19,
+            'Hooks',
+            'userInterface',
+            0.5
+        );
+        this.invTitle.fixedToCamera = true;
+        this.invTitle.setScrollFactor(0);
 
-        this.rodIcon2 = this.add.sprite(266, 36, 'uiContainers', 0);
-        this.rodIcon2.fixedToCamera = true;
-        this.rodIcon2.setScrollFactor(0)
+        this.hookIcon1 = this.add.sprite(236, 36, 'uiContainers', 0).setInteractive();
+        this.hookIcon1.fixedToCamera = true;
+        this.hookIcon1.setScrollFactor(0);
+        this.hookIcon1.on('pointerdown', function (pointer){
+            this.play('hookIconSwitch');
+        });
+        // Event handler for when the animation completes on our sprite
+        this.hookIcon1.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.resetIcon1();
+        }, this);
 
-        this.rodIcon3 = this.add.sprite(295, 36, 'uiContainers', 0);
-        this.rodIcon3.fixedToCamera = true;
-        this.rodIcon3.setScrollFactor(0)
+        this.hook1 = this.add.sprite(236, 36, 'baitAndHooks', 4);
+        this.hook1.fixedToCamera = true;
+        this.hook1.setScrollFactor(0);
 
-        this.bait1 = this.add.sprite(236, 76, 'uiContainers', 0);
+        this.hookIcon2 = this.add.sprite(266, 36, 'uiContainers', 0).setInteractive();
+        this.hookIcon2.fixedToCamera = true;
+        this.hookIcon2.setScrollFactor(0);
+        this.hookIcon2.on('pointerdown', function (pointer){
+            this.play('hookIconSwitch');
+        });
+        // Event handler for when the animation completes on our sprite
+        this.hookIcon2.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.resetIcon2();
+        }, this);
+
+        this.hook2 = this.add.sprite(266, 36, 'baitAndHooks', 9);
+        this.hook2.fixedToCamera = true;
+        this.hook2.setScrollFactor(0);
+
+        this.hookIcon3 = this.add.sprite(295, 36, 'uiContainers', 0).setInteractive();
+        this.hookIcon3.fixedToCamera = true;
+        this.hookIcon3.setScrollFactor(0);
+        this.hookIcon3.on('pointerdown', function (pointer){
+            this.play('hookIconSwitch');
+            //this.play('hookIconSwitchBack');
+        });
+        // Event handler for when the animation completes on our sprite
+        this.hookIcon3.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.resetIcon3();
+        }, this);
+
+        this.hook3 = this.add.sprite(295, 36, 'baitAndHooks', 8);
+        this.hook3.fixedToCamera = true;
+        this.hook3.setScrollFactor(0)
+
+        this.invTitle = new Text(
+            this,
+            265,
+            59,
+            'Bait',
+            'userInterface',
+            0.5
+        );
+        this.invTitle.fixedToCamera = true;
+        this.invTitle.setScrollFactor(0);
+
+        this.baitIcon1 = this.add.sprite(236, 76, 'uiContainers', 0).setInteractive();
+        this.baitIcon1.fixedToCamera = true;
+        this.baitIcon1.setScrollFactor(0);
+        this.baitIcon1.on('pointerdown', function (pointer){
+            this.play('hookIconSwitch');
+        });
+        // Event handler for when the animation completes on our sprite
+        this.baitIcon1.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.resetIcon4();
+        }, this);
+
+        this.bait1 = this.add.sprite(236, 76, 'baitAndHooks', 0);
         this.bait1.fixedToCamera = true;
         this.bait1.setScrollFactor(0)
 
-        this.bait2 = this.add.sprite(266, 76, 'uiContainers', 0);
+        this.baitIcon2 = this.add.sprite(266, 76, 'uiContainers', 0).setInteractive();
+        this.baitIcon2.fixedToCamera = true;
+        this.baitIcon2.setScrollFactor(0);
+        this.baitIcon2.on('pointerdown', function (pointer){
+            this.play('hookIconSwitch');
+        });
+        // Event handler for when the animation completes on our sprite
+        this.baitIcon2.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.resetIcon5();
+        }, this);
+
+        this.bait2 = this.add.sprite(266, 76, 'baitAndHooks', 1);
         this.bait2.fixedToCamera = true;
         this.bait2.setScrollFactor(0)
 
-        this.bait3 = this.add.sprite(295, 76, 'uiContainers', 0);
+        this.baitIcon3 = this.add.sprite(295, 76, 'uiContainers', 0).setInteractive();
+        this.baitIcon3.fixedToCamera = true;
+        this.baitIcon3.setScrollFactor(0);
+        this.baitIcon3.on('pointerdown', function (pointer){
+            this.play('hookIconSwitch');
+        });
+        // Event handler for when the animation completes on our sprite
+        this.baitIcon3.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.resetIcon6();
+        }, this);
+
+        this.invTitle = new Text(
+            this,
+            265,
+            94,
+            'Inventory',
+            'userInterface',
+            0.5
+        );
+        this.invTitle.fixedToCamera = true;
+        this.invTitle.setScrollFactor(0);
+
+        this.bait3 = this.add.sprite(295, 76, 'baitAndHooks', 2);
         this.bait3.fixedToCamera = true;
         this.bait3.setScrollFactor(0)
 
