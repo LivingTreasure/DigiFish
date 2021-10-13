@@ -55,8 +55,8 @@ class MainMap extends Phaser.Scene {
 
         this.character = this.physics.add.sprite(280, 264, 'character', 0);
         this.character.setBounce(0, 0);
-        this.character.setSize(16, 24);
-        this.character.body.offset.y = 0;
+        this.character.setSize(16, 5);
+        this.character.body.offset.y = 18;
 
         this.lineCast = true;
 
@@ -64,7 +64,7 @@ class MainMap extends Phaser.Scene {
         this.music = this.sound.add('music');
         var musicConfig = {
           mute: false,
-          volume: .5,
+          volume: .1,
           rate: 1,
           detune: 0,
           seek: 0,
@@ -168,32 +168,36 @@ class MainMap extends Phaser.Scene {
         if (this.cursors.left.isDown)
         {
             this.character.setVelocityX(-48);
-            this.character.setSize(16,16);
+            this.character.setSize(16,5);
+            this.character.body.offset.y = 10;
 
             this.character.anims.play('left', true);
         }
         else if (this.cursors.right.isDown)
         {
             this.character.setVelocityX(48);
-            this.character.setSize(16, 16);
+            this.character.setSize(16,5);
+            this.character.body.offset.y = 10;
 
             this.character.anims.play('right', true);
         }
         else if (this.cursors.down.isDown) {
             this.character.setVelocityY(48);
-            this.character.setSize(16, 16);
+            this.character.setSize(16,5);
+            this.character.body.offset.y = 10;
 
             this.character.anims.play('down', true);
         }
         else if (this.cursors.up.isDown) {
             this.character.setVelocityY(-48);
-            this.character.setSize(16, 16);
+            this.character.setSize(16,5);
+            this.character.body.offset.y = 10;
 
             this.character.anims.play('up', true);
         }
         else if (this.cursors.space.isDown) {
             if(!this.lineCast) {
-                this.character.setSize(16, 24);
+                this.character.setSize(16, 20);
                 this.character.body.offset.y = 4;
                 this.character.anims.play('throw', true);
                 this.waterDrop.play();
@@ -203,7 +207,7 @@ class MainMap extends Phaser.Scene {
 
             this.lineCast = !this.lineCast;
         }
-    }  
+    }
 
     resetIcon1(){
         this.hookIcon2.play('hookIconSwitchBack');
