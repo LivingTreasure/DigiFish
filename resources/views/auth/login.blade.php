@@ -3,6 +3,11 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
+        {{-- <div class="col-md-6"> --}}
+            <img class="mx-auto d-block w-25" src="assets/digifish_logo.png" alt="">
+        {{-- </div> --}}
+    </div>
+    <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
