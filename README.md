@@ -11,4 +11,5 @@ Start server by installing PHP and Composer
 CD to the directory
 Run "composer install"
 Then run "php artisan key:generate"
+Thenn run "php artisan websockets:serve" to start websockets server
 Then run "php artisan serve"
