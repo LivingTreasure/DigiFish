@@ -1,5 +1,6 @@
 var timedEvent;
 var text;
+var fishingPossible = false;
 
 
 class MainMap extends Phaser.Scene {
@@ -14,7 +15,6 @@ class MainMap extends Phaser.Scene {
 
         this.CONFIG = this.sys.game.CONFIG;
     }
-
 
     preload () {
 
@@ -54,9 +54,9 @@ class MainMap extends Phaser.Scene {
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
         this.character = this.physics.add.sprite(280, 264, 'character', 0);
-        this.character.setBounce(0, 0);
+        //this.character.setBounce(0, 0);
         this.character.setSize(16, 5);
-        this.character.body.offset.y = 18;
+        //this.character.body.offset.y = 18;
 
         this.lineCast = true;
 
@@ -143,26 +143,39 @@ class MainMap extends Phaser.Scene {
         });
 
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.fishCheck = false;
+
+        this.fishingLocation1 = this.physics.add.staticImage(240, 380, 'uiContainers', 0);
+        this.fishingLocation1.visible = false;
+
+        this.physics.add.overlap(this.fishingLocation1, this.character, function (){
+            fishingPossible = true;
+        });
 
         this.input.keyboard.on('keydown-SPACE', function () {
-            this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', Phaser.Math.Between(18, 126));
-            this.time.addEvent({
-                delay: Phaser.Math.Between(3000, 4000),
-                callback: ()=>{
-                    this.fish.visible = false;
-                    this.fish.active = false;
-                },
-                loop: true
-            })
+            if(this.fishCheck == false && fishingPossible == true){
+                this.fishCheck = true;
+                fishingPossible = false;
+                this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', Phaser.Math.Between(18, 126));
+
+                this.time.addEvent({
+                    delay: Phaser.Math.Between(1500, 2000),
+                    callback: ()=>{
+                        this.fish.visible = false;
+                        this.fish.active = false;
+                        this.fishCheck = false;
+                        fishingPossible = false;
+                    },
+                    loop: false
+                })
+            }
         }, this);
-
-
-
 
     }
 
     update () {
-        console.log("update")
+
+        //console.log("update")
         this.character.setVelocityX(0);
         this.character.setVelocityY(0);
         if (this.cursors.left.isDown)
@@ -196,16 +209,18 @@ class MainMap extends Phaser.Scene {
             this.character.anims.play('up', true);
         }
         else if (this.cursors.space.isDown) {
-            if(!this.lineCast) {
-                this.character.setSize(16, 20);
-                this.character.body.offset.y = 4;
-                this.character.anims.play('throw', true);
-                this.waterDrop.play();
-            } else {
-                this.character.anims.play('pullout', true);
+            if(fishingPossible){
+                if(!this.lineCast) {
+                    this.character.setSize(16, 20);
+                    this.character.body.offset.y = 4;
+                    this.character.anims.play('throw', true);
+                    this.waterDrop.play();
+                } else {
+                    this.character.anims.play('pullout', true);
+                }
+    
+                this.lineCast = !this.lineCast;
             }
-
-            this.lineCast = !this.lineCast;
         }
     }
 
