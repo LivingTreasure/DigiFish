@@ -3,6 +3,7 @@ var text;
 var fishingPossible = false;
 var newFish = 0;
 inventorySpace = 8;
+var isCurrentlyFishing = false;
 
 
 class MainMap extends Phaser.Scene {
@@ -174,6 +175,7 @@ class MainMap extends Phaser.Scene {
                                 this.fish.active = false;
                                 this.fishCheck = false;
                                 fishingPossible = false;
+                                isCurrentlyFishing = false;
                             },
                             loop: false
                         })
@@ -229,10 +231,12 @@ class MainMap extends Phaser.Scene {
             fishingPossible = false;
         }
         else if (this.cursors.space.isDown) {
-            if(fishingPossible){
+            if(fishingPossible && !isCurrentlyFishing){
+                isCurrentlyFishing = true;
+
                 if(!this.lineCast) {
-                    this.character.setSize(16, 20);
-                    this.character.body.offset.y = 4;
+                    // this.character.setSize(16, 20);
+                    // this.character.body.offset.y = 10;
                     this.character.anims.play('throw', true);
                     this.waterDrop.play();
                 } else {
