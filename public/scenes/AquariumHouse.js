@@ -18,6 +18,15 @@ class AquariumHouse extends Phaser.Scene {
     }
 
     preload () {
+        this.load.image('aquarium', 'assets/Modern_Interiors/tankwalls.png')
+        this.load.image('bedroom', 'assets/Modern_Interiors/Theme_Sorter/4_Bedroom_16x16.png')
+        this.load.image('borders', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Borders_16x16.png')
+        this.load.image('fishingitems', 'assets/Modern_Interiors/Theme_Sorter/4_Bedroom_16x16.png')
+        this.load.image('floors', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Floors_16x16.png')
+        this.load.image('genericfurniture', 'assets/Modern_Interiors/Theme_Sorter/9_Fishing_16x16.png')
+        this.load.image('kitchen', 'assets/Modern_Interiors/Theme_Sorter/12_Kitchen_16x16.png')
+        this.load.image('livingroom', 'assets/Modern_Interiors/Theme_Sorter/2_Living_Room_16x16.png')
+        this.load.image('walls', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Walls_16x16.png')
 
         this.load.image('bedroom', 'assets/images/Modern_Interiors/Theme_Sorter/4_Bedroom_16x16.png')
         this.load.image('borders', 'assets/images/Modern_Interiors/Room_Builder_subfiles/Room_Builder_borders_16x16.png')
@@ -43,7 +52,6 @@ class AquariumHouse extends Phaser.Scene {
     }
 
     create () {
-
         const mapHome = this.make.tilemap({ key: 'mapHome'})
         const tileset = mapHome.addTilesetImage('walls','walls')
         const tileset9 = mapHome.addTilesetImage('aquarium','aquarium')
@@ -57,16 +65,13 @@ class AquariumHouse extends Phaser.Scene {
         const allLayers = [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8, tileset9]
 
         var floor = mapHome.createLayer('Floor', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        //var borders = mapHome.createLayer('Borders', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var walls = mapHome.createLayer('Walls', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs1 = mapHome.createLayer('Objs_1', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs2 = mapHome.createLayer('Objs_2', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs3 = mapHome.createLayer('Objs_3', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
         this.character = this.physics.add.sprite(90, 180, 'walking', 11);
-        //this.character.setBounce(0, 0);
         this.character.setSize(16, 5);
-        //this.character.body.offset.y = 18;
 
         this.lineCast = true;
 
