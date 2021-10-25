@@ -1,10 +1,11 @@
 var timedEvent;
 var text;
 var fishingPossible = false;
+var mainScene = false;
 
 
 class AquariumHouse extends Phaser.Scene {
-    //THIS SCENE IS THE MAIN SCREEN
+    //THIS SCENE IS THE HOUSE SCREEN
     constructor () {
 
         super({key: 'AquariumHouse', active: false})
@@ -18,18 +19,22 @@ class AquariumHouse extends Phaser.Scene {
 
     preload () {
 
-        this.load.image('dirt', 'assets/images/water/TS_Dirt_Water.png')
-        this.load.image('grass', 'assets/images/water/TS_Water.png')
-        this.load.image('extra', 'assets/images/water/water_misc_16x16.png')
-        this.load.image('tree', 'assets/images/other/Palmtree_n_fruits.png')
-        this.load.image('buildings','assets/Serene Village/16x16_black_outline/editedoutside.png' )
+        this.load.image('bedroom', 'assets/images/Modern_Interiors/Theme_Sorter/4_Bedroom_16x16.png')
+        this.load.image('borders', 'assets/images/Modern_Interiors/Room_Builder_subfiles/Room_Builder_borders_16x16.png')
+        this.load.image('fishingitems', 'assets/images/Modern_Interiors/Theme_Sorter/9_Fishing_16x16.png')
+        this.load.image('floors', 'assets/images/Modern_Interiors/Room_Builder_subfiles/Room_Builder_floors_16x16.png')
+        this.load.image('genericfurniture', 'assets/images/Modern_Interiors/Theme_Sorter/1_Generic_16x16.png')
+        this.load.image('kitchen', 'assets/images/Modern_Interiors/Theme_Sorter/12_Kitchen_16x16.png')
+        this.load.image('livingroom', 'assets/images/Modern_Interiors/Theme_Sorter/2_LivingRoom_16x16.png')
+        this.load.image('walls', 'assets/images/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Walls_16x16.png')
+        this.load.image('aquarium', 'assets/images/Modern_Interiors/tankwalls.png')
         this.load.spritesheet('character', 'assets/characters/char1_fishingrod_animation_32x32.png', {
             frameWidth: 32,
             frameHeight: 32
         })
 
             // load the JSON file
-        this.load.tilemapTiledJSON('map', 'assets/json/AquariumHouse.json')
+        this.load.tilemapTiledJSON('mapHome', 'assets/json/AquariumHouse.json')
 
         // Audio
         this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
@@ -39,24 +44,26 @@ class AquariumHouse extends Phaser.Scene {
 
     create () {
 
-        const map = this.make.tilemap({ key: 'map'})
-        const tileset = map.addTilesetImage('aquarium','aquarium')
-        const tileset2 = map.addTilesetImage('bedroom','bedroom')
-        const tileset3 = map.addTilesetImage('borders','borders')
-        const tileset4 = map.addTilesetImage('fishingitems','fishingitems')
-        const tileset5 = map.addTilesetImage('floors','floors')
-        const tileset6 = map.addTilesetImage('genericfurniture','genericfurniture')
-        const tileset7 = map.addTilesetImage('kitchen','kitchen')
-        const tileset8 = map.addTilesetImage('livingroom','livingroom')
-        const allLayers = [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8]
+        const mapHome = this.make.tilemap({ key: 'mapHome'})
+        const tileset = mapHome.addTilesetImage('walls','walls')
+        const tileset9 = mapHome.addTilesetImage('aquarium','aquarium')
+        const tileset2 = mapHome.addTilesetImage('bedroom','bedroom')
+        const tileset3 = mapHome.addTilesetImage('borders','borders')
+        const tileset4 = mapHome.addTilesetImage('fishingitems','fishingitems')
+        const tileset5 = mapHome.addTilesetImage('floors','floors')
+        const tileset6 = mapHome.addTilesetImage('genericfurniture','genericfurniture')
+        const tileset7 = mapHome.addTilesetImage('kitchen','kitchen')
+        const tileset8 = mapHome.addTilesetImage('livingroom','livingroom')
+        const allLayers = [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8, tileset9]
 
-        var floor = map.createLayer('Floor', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        var walls = map.createLayer('Walls', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        var objs1 = map.createLayer('Objs_1', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        var objs2 = map.createLayer('Objs_2', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        var objs3 = map.createLayer('Objs_3', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var floor = mapHome.createLayer('Floor', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        //var borders = mapHome.createLayer('Borders', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var walls = mapHome.createLayer('Walls', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var objs1 = mapHome.createLayer('Objs_1', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var objs2 = mapHome.createLayer('Objs_2', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var objs3 = mapHome.createLayer('Objs_3', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
-        this.character = this.physics.add.sprite(280, 264, 'character', 0);
+        this.character = this.physics.add.sprite(90, 180, 'walking', 11);
         //this.character.setBounce(0, 0);
         this.character.setSize(16, 5);
         //this.character.body.offset.y = 18;
@@ -152,11 +159,11 @@ class AquariumHouse extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.fishCheck = false;
 
-        this.fishingLocation1 = this.physics.add.staticImage(240, 380, 'uiContainers', 0);
-        this.fishingLocation1.visible = false;
-
-        this.physics.add.overlap(this.fishingLocation1, this.character, function (){
-            fishingPossible = true;
+        this.houseDoor = this.physics.add.staticImage(90, 215, 'uiContainers', 0);
+        this.houseDoor.visible = false;
+        this.physics.add.overlap(this.houseDoor, this.character, function (){
+            //OPEN NEW MAP HERE
+            mainScene = true;
         });
 
         this.input.keyboard.on('keydown-SPACE', function () {
@@ -181,6 +188,12 @@ class AquariumHouse extends Phaser.Scene {
     }
 
     update () {
+
+        if(mainScene){
+            mainScene = false;
+            console.log("Start MainMap")
+            this.scene.start('MainMap');
+        }
 
         //console.log("update")
         this.character.setVelocityX(0);

@@ -4,6 +4,7 @@ var fishingPossible = false;
 var newFish = 0;
 inventorySpace = 8;
 var isCurrentlyFishing = false;
+var houseScene = false;
 
 
 class MainMap extends Phaser.Scene {
@@ -56,7 +57,7 @@ class MainMap extends Phaser.Scene {
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
-        this.character = this.physics.add.sprite(280, 264, 'character', 0);
+        this.character = this.physics.add.sprite(420, 160, 'walking', 0);
         //this.character.setBounce(0, 0);
         this.character.setSize(16, 5);
         //this.character.body.offset.y = 18;
@@ -156,12 +157,11 @@ class MainMap extends Phaser.Scene {
         });
 
         this.houseDoor = this.physics.add.staticImage(420, 132, 'uiContainers', 0);
-        this.houseDoor.visible = true;
+        this.houseDoor.visible = false;
         this.physics.add.overlap(this.houseDoor, this.character, function (){
-//OPEN NEW MAP HERE
-              this.scene.start('Preload');
-              console.log("Start Preload 2");
-            ;
+            //OPEN NEW MAP HERE
+            houseScene = true;
+            console.log("Start Preload 2");
         });
 
 
@@ -202,6 +202,11 @@ class MainMap extends Phaser.Scene {
     }
 
     update () {
+
+        if(houseScene){
+            houseScene = false;
+            this.scene.start('AquariumHouse');
+        }
 
         //console.log("update")
         this.character.setVelocityX(0);
@@ -256,6 +261,10 @@ class MainMap extends Phaser.Scene {
                 this.lineCast = !this.lineCast;
             }
         }
+    }
+
+    houseScene(){
+        this.scene.start('Preload');
     }
 
     //triggered when fish is clicked on
