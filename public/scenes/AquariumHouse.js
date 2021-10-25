@@ -1,19 +1,17 @@
 var timedEvent;
 var text;
 var fishingPossible = false;
-var newFish = 0;
-inventorySpace = 8;
 
 
-class MainMap extends Phaser.Scene {
+class AquariumHouse extends Phaser.Scene {
     //THIS SCENE IS THE MAIN SCREEN
     constructor () {
 
-        super({key: 'MainMap', active: false})
+        super({key: 'AquariumHouse', active: false})
     }
 
     init () {
-        console.log("Start MainMap")
+        console.log("Start AquariumHouse")
 
         this.CONFIG = this.sys.game.CONFIG;
     }
@@ -31,7 +29,7 @@ class MainMap extends Phaser.Scene {
         })
 
             // load the JSON file
-        this.load.tilemapTiledJSON('map', 'assets/json/DigiFishMainMapLong.json')
+        this.load.tilemapTiledJSON('map', 'assets/json/AquariumHouse.json')
 
         // Audio
         this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
@@ -42,18 +40,21 @@ class MainMap extends Phaser.Scene {
     create () {
 
         const map = this.make.tilemap({ key: 'map'})
-        const tileset = map.addTilesetImage('TS_Water','grass')
-        const tileset2 = map.addTilesetImage('TS_Dirt_Water','dirt')
-        const tileset3 = map.addTilesetImage('water_misc_16x16','extra')
-        const tileset4 = map.addTilesetImage('Palmtree_n_fruits','tree')
-        const tileset5 = map.addTilesetImage('Character','character')
-        const tileset6 = map.addTilesetImage('buildings','buildings')
+        const tileset = map.addTilesetImage('aquarium','aquarium')
+        const tileset2 = map.addTilesetImage('bedroom','bedroom')
+        const tileset3 = map.addTilesetImage('borders','borders')
+        const tileset4 = map.addTilesetImage('fishingitems','fishingitems')
+        const tileset5 = map.addTilesetImage('floors','floors')
+        const tileset6 = map.addTilesetImage('genericfurniture','genericfurniture')
+        const tileset7 = map.addTilesetImage('kitchen','kitchen')
+        const tileset8 = map.addTilesetImage('livingroom','livingroom')
+        const allLayers = [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8]
 
-        const allLayers = [tileset, tileset2, tileset3, tileset4, tileset6]
-
-        var ground = map.createLayer('Ground', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var floor = map.createLayer('Floor', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var walls = map.createLayer('Walls', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var objs1 = map.createLayer('Objs_1', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var objs2 = map.createLayer('Objs_2', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var objs3 = map.createLayer('Objs_3', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
         this.character = this.physics.add.sprite(280, 264, 'character', 0);
         //this.character.setBounce(0, 0);
@@ -80,10 +81,14 @@ class MainMap extends Phaser.Scene {
         // this.character.setOrigin(0.5, 1);
 
         //this.character.setCollideWorldBounds(true);
-        water.setCollisionByProperty({ collides: true });
-        objs.setCollisionByProperty({ collides: true });
-        this.physics.add.collider(this.character, water);
-        this.physics.add.collider(this.character, objs);
+        walls.setCollisionByProperty({ collides: true });
+        objs1.setCollisionByProperty({ collides: true });
+        objs2.setCollisionByProperty({ collides: true });
+        objs3.setCollisionByProperty({ collides: true });
+        this.physics.add.collider(this.character, walls);
+        this.physics.add.collider(this.character, objs1);
+        this.physics.add.collider(this.character, objs2);
+        this.physics.add.collider(this.character, objs3);
 
         // this.character.setDepth(10);
         this.cameras.main.setZoom(1)
@@ -154,47 +159,23 @@ class MainMap extends Phaser.Scene {
             fishingPossible = true;
         });
 
-        this.houseDoor = this.physics.add.staticImage(420, 132, 'uiContainers', 0);
-        this.houseDoor.visible = true;
-        this.physics.add.overlap(this.houseDoor, this.character, function (){
-//OPEN NEW MAP HERE
-              this.scene.start('Preload');
-              console.log("Start Preload 2");
-            ;
-        });
-
-
         this.input.keyboard.on('keydown-SPACE', function () {
             if(this.fishCheck == false && fishingPossible == true){
                 this.fishCheck = true;
                 fishingPossible = false;
+                this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', Phaser.Math.Between(18, 126));
+
                 this.time.addEvent({
                     delay: Phaser.Math.Between(1500, 2000),
                     callback: ()=>{
-
-                        newFish = Phaser.Math.Between(18, 126);
-                        this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', newFish);
-                        this.fish.setInteractive();
-                        this.fish.on('clicked', this.clickHandler, this);
-
-                        this.time.addEvent({
-                            delay: Phaser.Math.Between(1500, 2000),
-                            callback: ()=>{
-                                this.fish.visible = false;
-                                this.fish.active = false;
-                                this.fishCheck = false;
-                                fishingPossible = false;
-                            },
-                            loop: false
-                        })
+                        this.fish.visible = false;
+                        this.fish.active = false;
+                        this.fishCheck = false;
+                        fishingPossible = false;
                     },
                     loop: false
                 })
             }
-        }, this);
-
-        this.input.on('gameobjectup', function (pointer, gameObject){
-            gameObject.emit('clicked', gameObject);
         }, this);
 
     }
@@ -211,7 +192,6 @@ class MainMap extends Phaser.Scene {
             this.character.body.offset.y = 10;
 
             this.character.anims.play('left', true);
-            fishingPossible = false;
         }
         else if (this.cursors.right.isDown)
         {
@@ -220,7 +200,6 @@ class MainMap extends Phaser.Scene {
             this.character.body.offset.y = 10;
 
             this.character.anims.play('right', true);
-            fishingPossible = false;
         }
         else if (this.cursors.down.isDown) {
             this.character.setVelocityY(48);
@@ -228,7 +207,6 @@ class MainMap extends Phaser.Scene {
             this.character.body.offset.y = 10;
 
             this.character.anims.play('down', true);
-            fishingPossible = false;
         }
         else if (this.cursors.up.isDown) {
             this.character.setVelocityY(-48);
@@ -236,7 +214,6 @@ class MainMap extends Phaser.Scene {
             this.character.body.offset.y = 10;
 
             this.character.anims.play('up', true);
-            fishingPossible = false;
         }
         else if (this.cursors.space.isDown) {
             if(fishingPossible){
@@ -252,67 +229,6 @@ class MainMap extends Phaser.Scene {
                 this.lineCast = !this.lineCast;
             }
         }
-    }
-
-    //triggered when fish is clicked on
-    clickHandler(fish){
-        console.log(inventorySpace)
-        if(inventorySpace === 8){
-            this.caughtFish = this.add.sprite(231, 112, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-            console.log(inventorySpace)
-
-        }else if(inventorySpace === 7){
-            this.caughtFish = this.add.sprite(254, 112, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 6){
-            this.caughtFish = this.add.sprite(277, 112, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 5){
-            this.caughtFish = this.add.sprite(300, 112, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 4){
-            this.caughtFish = this.add.sprite(231, 136, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 3){
-            this.caughtFish = this.add.sprite(254, 136, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 2){
-            this.caughtFish = this.add.sprite(277, 136, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 1){
-            this.caughtFish = this.add.sprite(300, 136, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-        }
-
-        fish.off('clicked', this.clickHandler);
-        fish.input.enabled = false;
-        fish.setVisible(false);
-
     }
 
     resetIcon1(){
@@ -496,32 +412,32 @@ class MainMap extends Phaser.Scene {
         this.inventory1.fixedToCamera = true;
         this.inventory1.setScrollFactor(0)
 
-        this.inventory2 = this.add.sprite(254, 136, 'uiContainers', 24);
+        this.inventory1 = this.add.sprite(254, 136, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(277, 136, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory1 = this.add.sprite(300, 136, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
+
+        this.inventory2 = this.add.sprite(231, 112, 'uiContainers', 24);
         this.inventory2.fixedToCamera = true;
         this.inventory2.setScrollFactor(0)
 
-        this.inventory3 = this.add.sprite(277, 136, 'uiContainers', 24);
-        this.inventory3.fixedToCamera = true;
-        this.inventory3.setScrollFactor(0)
+        this.inventory1 = this.add.sprite(254, 112, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
 
-        this.inventory4 = this.add.sprite(300, 136, 'uiContainers', 24);
-        this.inventory4.fixedToCamera = true;
-        this.inventory4.setScrollFactor(0)
+        this.inventory1 = this.add.sprite(277, 112, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
 
-        this.inventory5 = this.add.sprite(231, 112, 'uiContainers', 24);
-        this.inventory5.fixedToCamera = true;
-        this.inventory5.setScrollFactor(0)
-
-        this.inventory6 = this.add.sprite(254, 112, 'uiContainers', 24);
-        this.inventory6.fixedToCamera = true;
-        this.inventory6.setScrollFactor(0)
-
-        this.inventory7 = this.add.sprite(277, 112, 'uiContainers', 24);
-        this.inventory7.fixedToCamera = true;
-        this.inventory7.setScrollFactor(0)
-
-        this.inventory8 = this.add.sprite(300, 112, 'uiContainers', 24);
-        this.inventory8.fixedToCamera = true;
-        this.inventory8.setScrollFactor(0)
+        this.inventory1 = this.add.sprite(300, 112, 'uiContainers', 24);
+        this.inventory1.fixedToCamera = true;
+        this.inventory1.setScrollFactor(0)
     }
 }
