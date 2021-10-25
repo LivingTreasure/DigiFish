@@ -41,6 +41,25 @@
     <script src="javaScript/app.js"></script>
     <script src="javaScript/main.js"></script>
 
+    <script>
+        window.Echo.join('user-presence')
+            .here((users) => {
+                // whenever user joined the room
+                // get all the users at once.
+                console.log('here')
+            })
+            .joining((user) => {
+                // when a new user joins the room
+                console.log('joining')
+            })
+            .leaving((user) => {
+                // when an existing user leaves the room
+                console.log('leaving')
+            })
+            .listen('.broadcast-as', function (e) {
+                // gets data when a new data is broadcasted
+            });
+    </script>
 </head>
 
 <body>
