@@ -159,7 +159,7 @@ class MainMap extends Phaser.Scene {
         this.houseDoor.visible = true;
         this.physics.add.overlap(this.houseDoor, this.character, function (){
 //OPEN NEW MAP HERE
-              this.scene.start('Preload');
+              this.scene.start('AquariumHouse');
               console.log("Start Preload 2");
             ;
         });

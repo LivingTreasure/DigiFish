@@ -2,7 +2,7 @@ class Preload extends Phaser.Scene {
     //THIS SCENE LOADS ALL THE ASSETS
 
     constructor () {
-        
+
         super({key: 'Preload', active: false})
     }
 
@@ -32,7 +32,7 @@ class Preload extends Phaser.Scene {
             frameHeight: 16
         })
 
-        
+
     }
 
     create () {
