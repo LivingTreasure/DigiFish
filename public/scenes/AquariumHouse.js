@@ -17,12 +17,16 @@ class AquariumHouse extends Phaser.Scene {
     }
 
     preload () {
+        this.load.image('aquarium', 'assets/Modern_Interiors/tankwalls.png')
+        this.load.image('bedroom', 'assets/Modern_Interiors/Theme_Sorter/4_Bedroom_16x16.png')
+        this.load.image('borders', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Borders_16x16.png')
+        this.load.image('fishingitems', 'assets/Modern_Interiors/Theme_Sorter/4_Bedroom_16x16.png')
+        this.load.image('floors', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Floors_16x16.png')
+        this.load.image('genericfurniture', 'assets/Modern_Interiors/Theme_Sorter/9_Fishing_16x16.png')
+        this.load.image('kitchen', 'assets/Modern_Interiors/Theme_Sorter/12_Kitchen_16x16.png')
+        this.load.image('livingroom', 'assets/Modern_Interiors/Theme_Sorter/2_Living_Room_16x16.png')
+        this.load.image('walls', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Walls_16x16.png')
 
-        this.load.image('dirt', 'assets/images/water/TS_Dirt_Water.png')
-        this.load.image('grass', 'assets/images/water/TS_Water.png')
-        this.load.image('extra', 'assets/images/water/water_misc_16x16.png')
-        this.load.image('tree', 'assets/images/other/Palmtree_n_fruits.png')
-        this.load.image('buildings','assets/Serene Village/16x16_black_outline/editedoutside.png' )
         this.load.spritesheet('character', 'assets/characters/char1_fishingrod_animation_32x32.png', {
             frameWidth: 32,
             frameHeight: 32
@@ -48,7 +52,8 @@ class AquariumHouse extends Phaser.Scene {
         const tileset6 = map.addTilesetImage('genericfurniture','genericfurniture')
         const tileset7 = map.addTilesetImage('kitchen','kitchen')
         const tileset8 = map.addTilesetImage('livingroom','livingroom')
-        const allLayers = [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8]
+        const tileset9 = map.addTilesetImage('walls','walls')
+        const allLayers = [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8, tileset9]
 
         var floor = map.createLayer('Floor', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var walls = map.createLayer('Walls', allLayers, 0, 0).setScale(this.assetsScaleFactor)
