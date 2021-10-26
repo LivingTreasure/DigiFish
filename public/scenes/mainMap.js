@@ -5,6 +5,7 @@ var newFish = 0;
 inventorySpace = 8;
 var isCurrentlyFishing = false;
 var houseScene = false;
+var musicPlaying = false;
 
 
 class MainMap extends Phaser.Scene {
@@ -75,7 +76,11 @@ class MainMap extends Phaser.Scene {
           loop: true,
           delay: 0
         }
-        this.music.play(musicConfig);
+        if(musicPlaying == false){
+            this.music.play(musicConfig);
+            musicPlaying = true;
+        }
+
 
         this.createUserInterface();
 
