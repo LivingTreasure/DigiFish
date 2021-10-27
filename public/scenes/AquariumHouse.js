@@ -15,6 +15,7 @@ class AquariumHouse extends Phaser.Scene {
         console.log("Start AquariumHouse")
 
         this.CONFIG = this.sys.game.CONFIG;
+        this.timer = 0;
     }
 
     preload () {
@@ -50,7 +51,7 @@ class AquariumHouse extends Phaser.Scene {
         this.load.audio('music', 'assets/Audio/Reality.mp3');
     }
 
-    create () {
+    async create () {
         const mapHome = this.make.tilemap({ key: 'mapHome'})
         const tileset = mapHome.addTilesetImage('aquarium','aquarium')
         const tileset2 = mapHome.addTilesetImage('bedroom','bedroom')
@@ -176,14 +177,31 @@ class AquariumHouse extends Phaser.Scene {
                 })
             }
         }, this);
+        var moveData = await this.getMoveFromDB();
 
+        this.character.setX(moveData.playerX);
+        this.character.setY(moveData.playerY);
+
+        // if(moveData.currentScene != this.getSceneName()) {
+        //     this.saveMoveToDB(moveData.currentScene);
+        //     this.scene.start(moveData.currentScene);
+        // }
     }
 
-    update () {
+    update (time, delta) {
+        this.timer += delta;
+        while (this.timer > 5000) {
+            this.saveMoveToDB();
+            console.log("x: " + this.character.x);
+            console.log("y: " + this.character.y);
+            this.timer -= 5000;
+        }
+
 
         if(mainScene){
             mainScene = false;
-            console.log("Start MainMap")
+            console.log("Start MainMap");
+            this.saveMoveToDB('MainMap', 410, 158);
             this.scene.start('MainMap');
         }
 
@@ -431,4 +449,42 @@ class AquariumHouse extends Phaser.Scene {
     //     this.inventory1.fixedToCamera = true;
     //     this.inventory1.setScrollFactor(0)
     // }
+
+    getSceneName() {
+        return "AquariumHouse";
+    }
+
+    saveMoveToDB(newScene = this.getSceneName(), x = this.character.x, y = this.character.y) {
+        axios.post('/api/move', {
+            playerX: x,
+            playerY: y,
+            currentScene: newScene
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+            } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+            }
+            console.log(error.config);
+        });
+    }
+
+    async getMoveFromDB() {
+        const response = await axios.get('/api/move')
+        return response.data
+    }
 }

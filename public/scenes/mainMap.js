@@ -209,17 +209,25 @@ class MainMap extends Phaser.Scene {
 
         this.character.setX(moveData.playerX);
         this.character.setY(moveData.playerY);
+
+        if(moveData.currentScene != this.getSceneName()) {
+            this.saveMoveToDB(moveData.currentScene);
+            this.scene.start(moveData.currentScene);
+        }
     }
 
     update (time, delta) {
         this.timer += delta;
         while (this.timer > 5000) {
             this.saveMoveToDB();
+            console.log("x: " + this.character.x);
+            console.log("y: " + this.character.y);
             this.timer -= 5000;
         }
 
         if(houseScene){
             houseScene = false;
+            this.saveMoveToDB('AquariumHouse', 90, 178);
             this.scene.start('AquariumHouse');
         }
 
@@ -554,14 +562,14 @@ class MainMap extends Phaser.Scene {
     }
 
     getSceneName() {
-        return 'mainMap';
+        return 'MainMap';
     }
 
-    saveMoveToDB() {
+    saveMoveToDB(newScene = this.getSceneName(), x = this.character.x, y = this.character.y) {
         axios.post('/api/move', {
-            playerX: this.character.x,
-            playerY: this.character.y,
-            currentScene: this.getSceneName()
+            playerX: x,
+            playerY: y,
+            currentScene: newScene
         })
         .then(function (response) {
             console.log(response);
