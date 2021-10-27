@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\APIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,5 +19,8 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('game');
 })->name('game')->middleware('auth');
+
+Route::post('/api/move', [APIController::class, 'setMove']);
+Route::get('/api/move', [APIController::class, 'getMove']);
 
 Auth::routes();

@@ -17,6 +17,7 @@ class MainMap extends Phaser.Scene {
         console.log("Start MainMap")
 
         this.CONFIG = this.sys.game.CONFIG;
+        this.timer = 0;
     }
 
     preload () {
@@ -40,7 +41,7 @@ class MainMap extends Phaser.Scene {
         this.load.audio('music', 'assets/Audio/Reality.mp3');
     }
 
-    create () {
+    async create () {
 
         const map = this.make.tilemap({ key: 'map'})
         const tileset = map.addTilesetImage('TS_Water','grass')
@@ -189,9 +190,18 @@ class MainMap extends Phaser.Scene {
             gameObject.emit('clicked', gameObject);
         }, this);
 
+        var moveData = await this.getMoveFromDB();
+
+        this.character.setX(moveData.playerX);
+        this.character.setY(moveData.playerY);
     }
 
-    update () {
+    update (time, delta) {
+        this.timer += delta;
+        while (this.timer > 5000) {
+            this.saveMoveToDB();
+            this.timer -= 5000;
+        }
 
         //console.log("update")
         this.character.setVelocityX(0);
@@ -517,5 +527,43 @@ class MainMap extends Phaser.Scene {
         this.inventory8 = this.add.sprite(300, 112, 'uiContainers', 24);
         this.inventory8.fixedToCamera = true;
         this.inventory8.setScrollFactor(0)
+    }
+
+    getSceneName() {
+        return 'mainMap';
+    }
+
+    saveMoveToDB() {
+        axios.post('/api/move', {
+            playerX: this.character.x,
+            playerY: this.character.y,
+            currentScene: this.getSceneName()
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+            } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+            }
+            console.log(error.config);
+        });
+    }
+
+    async getMoveFromDB() {
+        const response = await axios.get('/api/move')
+        return response.data
     }
 }
