@@ -6,6 +6,8 @@ inventorySpace = 8;
 var isCurrentlyFishing = false;
 var houseScene = false;
 var musicPlaying = false;
+var initialX;
+var initialY;
 
 
 class MainMap extends Phaser.Scene {
@@ -15,11 +17,14 @@ class MainMap extends Phaser.Scene {
         super({key: 'MainMap', active: false})
     }
 
-    init () {
+    init (data) {
         console.log("Start MainMap")
 
         this.CONFIG = this.sys.game.CONFIG;
         this.timer = 0;
+        
+        this.initialX = data.x;
+        this.initialY = data.y;
     }
 
     preload () {
@@ -205,22 +210,17 @@ class MainMap extends Phaser.Scene {
             gameObject.emit('clicked', gameObject);
         }, this);
 
-        var moveData = await this.getMoveFromDB();
-
-        this.character.setX(moveData.playerX);
-        this.character.setY(moveData.playerY);
-
-        if(moveData.currentScene != this.getSceneName()) {
-            this.saveMoveToDB(moveData.currentScene);
-            this.scene.start(moveData.currentScene);
+        if(this.initialX != undefined && this.initialY != undefined) {
+            this.character.setX(this.initialX);
+            this.character.setY(this.initialY);
         }
     }
 
     update (time, delta) {
         this.timer += delta;
-        while (this.timer > 3000) {
+        while (this.timer > 2000) {
             this.saveMoveToDB();
-            this.timer -= 3000;
+            this.timer -= 2000;
         }
 
         if(houseScene){

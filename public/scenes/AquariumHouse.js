@@ -2,7 +2,8 @@ var timedEvent;
 var text;
 var fishingPossible = false;
 var mainScene = false;
-
+var initialX;
+var initialY;
 
 class AquariumHouse extends Phaser.Scene {
     //THIS SCENE IS THE HOUSE SCREEN
@@ -11,11 +12,14 @@ class AquariumHouse extends Phaser.Scene {
         super({key: 'AquariumHouse', active: false})
     }
 
-    init () {
+    init (data) {
         console.log("Start AquariumHouse")
 
         this.CONFIG = this.sys.game.CONFIG;
         this.timer = 0;
+
+        this.initialX = data.x;
+        this.initialY = data.y;
     }
 
     preload () {
@@ -177,22 +181,18 @@ class AquariumHouse extends Phaser.Scene {
                 })
             }
         }, this);
-        var moveData = await this.getMoveFromDB();
 
-        this.character.setX(moveData.playerX);
-        this.character.setY(moveData.playerY);
-
-        // if(moveData.currentScene != this.getSceneName()) {
-        //     this.saveMoveToDB(moveData.currentScene);
-        //     this.scene.start(moveData.currentScene);
-        // }
+        if(this.initialX != undefined && this.initialY != undefined) {
+            this.character.setX(this.initialX);
+            this.character.setY(this.initialY);
+        }
     }
 
     update (time, delta) {
         this.timer += delta;
-        while (this.timer > 3000) {
+        while (this.timer > 2000) {
             this.saveMoveToDB();
-            this.timer -= 3000;
+            this.timer -= 2000;
         }
 
 
