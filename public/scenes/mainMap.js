@@ -134,6 +134,34 @@ class MainMap extends Phaser.Scene {
             frameRate: 5,
         });
 
+        //running right animation (EC)
+        this.anims.create({
+            key: 'runright',
+            frames: this.anims.generateFrameNumbers('walking', { frames: [12, 13, 14, 15] }),
+            frameRate: 10,
+        });
+
+        //running down animation (EC)
+        this.anims.create({
+            key: 'rundown',
+            frames: this.anims.generateFrameNumbers('walking', { frames: [0, 1, 2, 3] }),
+            frameRate: 10,
+        });
+
+        //running up animation (EC)
+        this.anims.create({
+            key: 'runup',
+            frames: this.anims.generateFrameNumbers('walking', { frames: [8, 9, 10, 11] }),
+            frameRate: 10,
+        });
+
+        //running left animation (EC)
+        this.anims.create({
+            key: 'runleft',
+            frames: this.anims.generateFrameNumbers('walking', { frames: [4, 5, 6, 7] }),
+            frameRate: 10,
+        });
+
         //cast line animation
         this.anims.create({
             key: 'throw',
@@ -252,42 +280,59 @@ class MainMap extends Phaser.Scene {
         //walk left when pressing left arrow key
         if (this.cursors.left.isDown)
         {
-            this.character.setVelocityX(-48);
+          if (this.cursors.shift.isDown){
+              this.character.setVelocityX(-96);
+              this.character.anims.play('runleft', true);
+          }else{
+              this.character.setVelocityX(-48);
+              this.character.anims.play('left', true);
+          }
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
-
-            this.character.anims.play('left', true);
             fishingPossible = false;
             lineCast = false;
         }
         //walk right when pressing right arrow key
         else if (this.cursors.right.isDown)
         {
-            this.character.setVelocityX(48);
+          if (this.cursors.shift.isDown){
+              this.character.setVelocityX(96);
+              this.character.anims.play('runright', true);
+          }else{
+              this.character.setVelocityX(48);
+              this.character.anims.play('right', true);
+          }
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
-
-            this.character.anims.play('right', true);
             fishingPossible = false;
             lineCast = false;
         }
         //walk down when pressing down arrow key
         else if (this.cursors.down.isDown) {
-            this.character.setVelocityY(48);
+          if (this.cursors.shift.isDown){
+              this.character.setVelocityY(96);
+              this.character.anims.play('rundown', true);
+          }else{
+              this.character.setVelocityY(48);
+              this.character.anims.play('down', true);
+          }
+
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
-
-            this.character.anims.play('down', true);
             fishingPossible = false;
             lineCast = false;
         }
         //walk up when pressing up arrow key
         else if (this.cursors.up.isDown) {
-            this.character.setVelocityY(-48);
+          if (this.cursors.shift.isDown){
+              this.character.setVelocityY(-96);
+              this.character.anims.play('runup', true);
+          }else{
+              this.character.setVelocityY(-48);
+              this.character.anims.play('up', true);
+          }
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
-
-            this.character.anims.play('up', true);
             fishingPossible = false;
             lineCast = false;
         }
