@@ -35,7 +35,7 @@
     <script src="scenes/boot.js"></script>
     <script src="scenes/preload.js"></script>
     <script src="scenes/mainMap.js"></script>
-
+    <script src="scenes/AquariumHouse.js"></script>
     <!--SCRIPTS -->
     <script src="javaScript/app.js"></script>
     <script src="javaScript/main.js"></script>
@@ -47,6 +47,6 @@
 
 <body>
     <div id="phaser-app"></div>
-    
+
 </body>
 </html>

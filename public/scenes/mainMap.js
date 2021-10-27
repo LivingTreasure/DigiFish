@@ -4,6 +4,8 @@ var fishingPossible = false;
 var newFish = 0;
 inventorySpace = 8;
 var isCurrentlyFishing = false;
+var houseScene = false;
+var musicPlaying = false;
 
 
 class MainMap extends Phaser.Scene {
@@ -57,7 +59,7 @@ class MainMap extends Phaser.Scene {
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
-        this.character = this.physics.add.sprite(280, 264, 'character', 0);
+        this.character = this.physics.add.sprite(420, 160, 'walking', 0);
         //this.character.setBounce(0, 0);
         this.character.setSize(16, 5);
         //this.character.body.offset.y = 18;
@@ -75,7 +77,11 @@ class MainMap extends Phaser.Scene {
           loop: true,
           delay: 0
         }
-        this.music.play(musicConfig);
+        if(musicPlaying == false){
+            this.music.play(musicConfig);
+            musicPlaying = true;
+        }
+
 
         this.createUserInterface();
 
@@ -156,6 +162,15 @@ class MainMap extends Phaser.Scene {
             fishingPossible = true;
         });
 
+        this.houseDoor = this.physics.add.staticImage(420, 132, 'uiContainers', 0);
+        this.houseDoor.visible = false;
+        this.physics.add.overlap(this.houseDoor, this.character, function (){
+            //OPEN NEW MAP HERE
+            houseScene = true;
+            console.log("Start Preload 2");
+        });
+
+
         this.input.keyboard.on('keydown-SPACE', function () {
             if(this.fishCheck == false && fishingPossible == true){
                 this.fishCheck = true;
@@ -201,6 +216,11 @@ class MainMap extends Phaser.Scene {
         while (this.timer > 5000) {
             this.saveMoveToDB();
             this.timer -= 5000;
+        }
+
+        if(houseScene){
+            houseScene = false;
+            this.scene.start('AquariumHouse');
         }
 
         //console.log("update")
@@ -252,10 +272,14 @@ class MainMap extends Phaser.Scene {
                 } else {
                     this.character.anims.play('pullout', true);
                 }
-    
+
                 this.lineCast = !this.lineCast;
             }
         }
+    }
+
+    houseScene(){
+        this.scene.start('Preload');
     }
 
     //triggered when fish is clicked on
