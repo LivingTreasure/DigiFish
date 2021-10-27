@@ -26,6 +26,12 @@ class APIController extends Controller
     }
 
     public function getMove(Request $request) {
-        return auth()->user()->playerData->move_data;
+        $playerData = auth()->user()->playerData;
+        
+        if ($playerData != null) {
+            return $playerData->move_data;
+        } else {
+            return '{}';
+        }
     }
 }

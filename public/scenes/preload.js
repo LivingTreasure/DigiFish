@@ -38,7 +38,11 @@ class Preload extends Phaser.Scene {
     async create () {
         var moveData = await this.getMoveFromDB();
 
-        this.scene.start(moveData.currentScene, {x: moveData.playerX, y: moveData.playerY});
+        if(!Object.keys(moveData).length === 0 && !moveData.constructor === Object) {
+            this.scene.start(moveData.currentScene, {x: moveData.playerX, y: moveData.playerY});
+        } else {
+            this.scene.start("MainMap");
+        }
     }
 
     async getMoveFromDB() {
