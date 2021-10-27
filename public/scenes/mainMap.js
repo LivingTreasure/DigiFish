@@ -3,7 +3,7 @@ var text;
 var fishingPossible = false;
 var newFish = 0;
 inventorySpace = 8;
-var isCurrentlyFishing = false;
+var lineCast;
 var houseScene = false;
 var musicPlaying = false; //whether or not music is playing
 var initialX;
@@ -69,7 +69,6 @@ class MainMap extends Phaser.Scene {
         this.character.setSize(16, 5);
         //this.character.body.offset.y = 18;
 
-        this.lineCast = true;
 
         //configures music
         this.waterDrop = this.sound.add('water_drop');
@@ -187,8 +186,13 @@ class MainMap extends Phaser.Scene {
         //when possible, allows you to fish
         this.input.keyboard.on('keydown-SPACE', function () {
             if(this.fishCheck == false && fishingPossible == true){
+                lineCast = true;
                 this.fishCheck = true;
                 fishingPossible = false;
+
+                this.character.anims.play('throw', true);
+                this.waterDrop.play();
+
                 this.time.addEvent({
                     delay: Phaser.Math.Between(1500, 2000),
                     callback: ()=>{
@@ -205,7 +209,11 @@ class MainMap extends Phaser.Scene {
                                 this.fish.active = false;
                                 this.fishCheck = false;
                                 fishingPossible = false;
-                                isCurrentlyFishing = false;
+
+                                if(lineCast == true){
+                                  this.character.anims.play('pullout', true);
+                                  lineCast = false;
+                                }
                             },
                             loop: false
                         })
@@ -250,6 +258,7 @@ class MainMap extends Phaser.Scene {
 
             this.character.anims.play('left', true);
             fishingPossible = false;
+            lineCast = false;
         }
         //walk right when pressing right arrow key
         else if (this.cursors.right.isDown)
@@ -260,6 +269,7 @@ class MainMap extends Phaser.Scene {
 
             this.character.anims.play('right', true);
             fishingPossible = false;
+            lineCast = false;
         }
         //walk down when pressing down arrow key
         else if (this.cursors.down.isDown) {
@@ -269,6 +279,7 @@ class MainMap extends Phaser.Scene {
 
             this.character.anims.play('down', true);
             fishingPossible = false;
+            lineCast = false;
         }
         //walk up when pressing up arrow key
         else if (this.cursors.up.isDown) {
@@ -278,24 +289,28 @@ class MainMap extends Phaser.Scene {
 
             this.character.anims.play('up', true);
             fishingPossible = false;
+            lineCast = false;
         }
         //play appropriate fishing animations and sounds
-        else if (this.cursors.space.isDown) {
-            if(fishingPossible && !isCurrentlyFishing){
-                isCurrentlyFishing = true;
-
-                if(!this.lineCast) {
-                    // this.character.setSize(16, 20);
-                    // this.character.body.offset.y = 10;
-                    this.character.anims.play('throw', true);
-                    this.waterDrop.play();
-                } else {
-                    this.character.anims.play('pullout', true);
-                }
-
-                this.lineCast = !this.lineCast;
-            }
-        }
+        // else if (this.cursors.space.isDown) {
+        //     if(fishingPossible && !isCurrentlyFishing){
+        //         isCurrentlyFishing = true;
+        //
+        //         if(this.lineCast == false) {
+        //             // this.character.setSize(16, 20);
+        //             // this.character.body.offset.y = 10;
+        //             this.character.anims.play('throw', true);
+        //             this.waterDrop.play();
+        //             this.lineCast = true;
+        //         } else {
+        //             this.character.anims.play('pullout', true);
+        //             this.lineCast = false;
+        //             isCurrentlyFishing = false;
+        //         }
+        //
+        //
+        //     }
+        // }
     }
 
     houseScene(){
@@ -360,7 +375,10 @@ class MainMap extends Phaser.Scene {
         fish.off('clicked', this.clickHandler);
         fish.input.enabled = false;
         fish.setVisible(false);
-
+        if(lineCast == true){
+          this.character.anims.play('pullout', true);
+          lineCast = false;
+        }
     }
 
     resetIcon1(){
