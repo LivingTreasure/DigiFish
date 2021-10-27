@@ -218,11 +218,9 @@ class MainMap extends Phaser.Scene {
 
     update (time, delta) {
         this.timer += delta;
-        while (this.timer > 5000) {
+        while (this.timer > 3000) {
             this.saveMoveToDB();
-            console.log("x: " + this.character.x);
-            console.log("y: " + this.character.y);
-            this.timer -= 5000;
+            this.timer -= 3000;
         }
 
         if(houseScene){
