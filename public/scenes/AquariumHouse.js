@@ -23,15 +23,7 @@ class AquariumHouse extends Phaser.Scene {
     }
 
     preload () {
-        // this.load.image('aquarium', 'assets/Modern_Interiors/tankwalls.png')
-        // this.load.image('bedroom', 'assets/Modern_Interiors/Theme_Sorter/4_Bedroom_16x16.png')
-        // this.load.image('borders', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Borders_16x16.png')
-        // this.load.image('fishingitems', 'assets/Modern_Interiors/Theme_Sorter/9_Fishing_16x16.png')
-        // this.load.image('floors', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Floors_16x16.png')
-        // this.load.image('genericfurniture', 'assets/Modern_Interiors/Theme_Sorter/1_Generic_16x16.png')
-        // this.load.image('kitchen', 'assets/Modern_Interiors/Theme_Sorter/12_Kitchen_16x16.png')
-        // this.load.image('livingroom', 'assets/Modern_Interiors/Theme_Sorter/2_LivingRoom_16x16.png')
-        // this.load.image('walls', 'assets/Modern_Interiors/Room_Builder_subfiles/Room_Builder_Walls_16x16.png')
+        //loads textures
         this.load.image('aquarium', 'assets/images/Modern_Interiors/tankwalls.png')
         this.load.image('bedroom', 'assets/images/Modern_Interiors/Theme_Sorter/4_Bedroom_16x16.png')
         this.load.image('borders', 'assets/images/Modern_Interiors/Room_Builder_subfiles/Room_Builder_borders_16x16.png')
@@ -46,17 +38,18 @@ class AquariumHouse extends Phaser.Scene {
             frameHeight: 32
         })
 
-            // load the JSON file
+        // load the JSON file
         this.load.tilemapTiledJSON('mapHome', 'assets/json/AquariumHouse.json')
 
-        // Audio
+        // load audio
         this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
-
         this.load.audio('music', 'assets/Audio/Reality.mp3');
     }
 
     async create () {
+        //makes map
         const mapHome = this.make.tilemap({ key: 'mapHome'})
+        //assigns textures to tilesets
         const tileset = mapHome.addTilesetImage('aquarium','aquarium')
         const tileset2 = mapHome.addTilesetImage('bedroom','bedroom')
         const tileset3 = mapHome.addTilesetImage('borders','borders')
@@ -66,19 +59,23 @@ class AquariumHouse extends Phaser.Scene {
         const tileset7 = mapHome.addTilesetImage('kitchen','kitchen')
         const tileset8 = mapHome.addTilesetImage('livingroom','livingroom')
         const tileset9 = mapHome.addTilesetImage('walls','walls')
+        //adds tilesets to layers
         const allLayers = [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8, tileset9]
 
+        //creates layers
         var floor = mapHome.createLayer('Floor', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var walls = mapHome.createLayer('Walls', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs1 = mapHome.createLayer('Objs_1', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs2 = mapHome.createLayer('Objs_2', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs3 = mapHome.createLayer('Objs_3', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
+        //adds character to map
         this.character = this.physics.add.sprite(90, 180, 'walking', 11);
         this.character.setSize(16, 5);
 
-        this.lineCast = true;
+//        this.lineCast = true;
 
+        //adds music
         this.waterDrop = this.sound.add('water_drop');
         this.music = this.sound.add('music');
         var musicConfig = {
@@ -97,6 +94,7 @@ class AquariumHouse extends Phaser.Scene {
         // this.character.setOrigin(0.5, 1);
 
         //this.character.setCollideWorldBounds(true);
+        //makes character collide with walls and items
         walls.setCollisionByProperty({ collides: true });
         objs1.setCollisionByProperty({ collides: true });
         objs2.setCollisionByProperty({ collides: true });
@@ -156,6 +154,7 @@ class AquariumHouse extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.fishCheck = false;
 
+        //allows character to exit door
         this.houseDoor = this.physics.add.staticImage(90, 215, 'uiContainers', 0);
         this.houseDoor.visible = false;
         this.physics.add.overlap(this.houseDoor, this.character, function (){
@@ -163,24 +162,24 @@ class AquariumHouse extends Phaser.Scene {
             mainScene = true;
         });
 
-        this.input.keyboard.on('keydown-SPACE', function () {
-            if(this.fishCheck == false && fishingPossible == true){
-                this.fishCheck = true;
-                fishingPossible = false;
-                this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', Phaser.Math.Between(18, 126));
-
-                this.time.addEvent({
-                    delay: Phaser.Math.Between(1500, 2000),
-                    callback: ()=>{
-                        this.fish.visible = false;
-                        this.fish.active = false;
-                        this.fishCheck = false;
-                        fishingPossible = false;
-                    },
-                    loop: false
-                })
-            }
-        }, this);
+        // this.input.keyboard.on('keydown-SPACE', function () {
+        //     if(this.fishCheck == false && fishingPossible == true){
+        //         this.fishCheck = true;
+        //         fishingPossible = false;
+        //         this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', Phaser.Math.Between(18, 126));
+        //
+        //         this.time.addEvent({
+        //             delay: Phaser.Math.Between(1500, 2000),
+        //             callback: ()=>{
+        //                 this.fish.visible = false;
+        //                 this.fish.active = false;
+        //                 this.fishCheck = false;
+        //                 fishingPossible = false;
+        //             },
+        //             loop: false
+        //         })
+        //     }
+        // }, this);
 
         if(this.initialX != undefined && this.initialY != undefined) {
             this.character.setX(this.initialX);
@@ -206,22 +205,23 @@ class AquariumHouse extends Phaser.Scene {
         //console.log("update")
         this.character.setVelocityX(0);
         this.character.setVelocityY(0);
-        if (this.cursors.left.isDown)
-        {
+        //walk left when pressing left arrow key
+        if (this.cursors.left.isDown){
             this.character.setVelocityX(-48);
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
 
             this.character.anims.play('left', true);
         }
-        else if (this.cursors.right.isDown)
-        {
+        //walk right when pressing right arrow key
+        else if (this.cursors.right.isDown){
             this.character.setVelocityX(48);
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
 
             this.character.anims.play('right', true);
         }
+        //walk down when pressing down arrow key
         else if (this.cursors.down.isDown) {
             this.character.setVelocityY(48);
             this.character.setSize(16,5);
@@ -229,6 +229,7 @@ class AquariumHouse extends Phaser.Scene {
 
             this.character.anims.play('down', true);
         }
+        //walk up when pressing up arrow key
         else if (this.cursors.up.isDown) {
             this.character.setVelocityY(-48);
             this.character.setSize(16,5);

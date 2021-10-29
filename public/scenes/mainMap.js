@@ -3,9 +3,9 @@ var text;
 var fishingPossible = false;
 var newFish = 0;
 inventorySpace = 8;
-var isCurrentlyFishing = false;
+var lineCast;
 var houseScene = false;
-var musicPlaying = false;
+var musicPlaying = false; //whether or not music is playing
 var initialX;
 var initialY;
 
@@ -13,7 +13,6 @@ var initialY;
 class MainMap extends Phaser.Scene {
     //THIS SCENE IS THE MAIN SCREEN
     constructor () {
-
         super({key: 'MainMap', active: false})
     }
 
@@ -22,13 +21,13 @@ class MainMap extends Phaser.Scene {
 
         this.CONFIG = this.sys.game.CONFIG;
         this.timer = 0;
-        
+
         this.initialX = data.x;
         this.initialY = data.y;
     }
 
+    //loads the textures
     preload () {
-
         this.load.image('dirt', 'assets/images/water/TS_Dirt_Water.png')
         this.load.image('grass', 'assets/images/water/TS_Water.png')
         this.load.image('extra', 'assets/images/water/water_misc_16x16.png')
@@ -39,38 +38,39 @@ class MainMap extends Phaser.Scene {
             frameHeight: 32
         })
 
-            // load the JSON file
+        // load the JSON file
         this.load.tilemapTiledJSON('map', 'assets/json/DigiFishMainMapLong.json')
 
-        // Audio
+        // loads audio
         this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
-
         this.load.audio('music', 'assets/Audio/Reality.mp3');
     }
 
     async create () {
-
+        //makes map
         const map = this.make.tilemap({ key: 'map'})
+        //assigns textures to tilesets
         const tileset = map.addTilesetImage('TS_Water','grass')
         const tileset2 = map.addTilesetImage('TS_Dirt_Water','dirt')
         const tileset3 = map.addTilesetImage('water_misc_16x16','extra')
         const tileset4 = map.addTilesetImage('Palmtree_n_fruits','tree')
         const tileset5 = map.addTilesetImage('Character','character')
         const tileset6 = map.addTilesetImage('buildings','buildings')
-
+        //adds tilesets to the layers
         const allLayers = [tileset, tileset2, tileset3, tileset4, tileset6]
-
+        //creates layers
         var ground = map.createLayer('Ground', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-
+        //adds character to map
+        //FIX LATER: THIS LOCATION NEEDS TO CHANGE DEPENDING ON WHAT DOOR YOU COME FROM
         this.character = this.physics.add.sprite(420, 160, 'walking', 0);
         //this.character.setBounce(0, 0);
         this.character.setSize(16, 5);
         //this.character.body.offset.y = 18;
 
-        this.lineCast = true;
 
+        //configures music
         this.waterDrop = this.sound.add('water_drop');
         this.music = this.sound.add('music');
         var musicConfig = {
@@ -82,17 +82,19 @@ class MainMap extends Phaser.Scene {
           loop: true,
           delay: 0
         }
+        //plays music if music is not already playing
         if(musicPlaying == false){
             this.music.play(musicConfig);
             musicPlaying = true;
         }
 
-
+        //runs function that makes the user interface
         this.createUserInterface();
 
         // this.character.setOrigin(0.5, 1);
 
         //this.character.setCollideWorldBounds(true);
+        //makes character collide wih objects and water
         water.setCollisionByProperty({ collides: true });
         objs.setCollisionByProperty({ collides: true });
         this.physics.add.collider(this.character, water);
@@ -132,12 +134,42 @@ class MainMap extends Phaser.Scene {
             frameRate: 5,
         });
 
+        //running right animation (EC)
+        this.anims.create({
+            key: 'runright',
+            frames: this.anims.generateFrameNumbers('walking', { frames: [12, 13, 14, 15] }),
+            frameRate: 10,
+        });
+
+        //running down animation (EC)
+        this.anims.create({
+            key: 'rundown',
+            frames: this.anims.generateFrameNumbers('walking', { frames: [0, 1, 2, 3] }),
+            frameRate: 10,
+        });
+
+        //running up animation (EC)
+        this.anims.create({
+            key: 'runup',
+            frames: this.anims.generateFrameNumbers('walking', { frames: [8, 9, 10, 11] }),
+            frameRate: 10,
+        });
+
+        //running left animation (EC)
+        this.anims.create({
+            key: 'runleft',
+            frames: this.anims.generateFrameNumbers('walking', { frames: [4, 5, 6, 7] }),
+            frameRate: 10,
+        });
+
+        //cast line animation
         this.anims.create({
             key: 'throw',
             frames: this.anims.generateFrameNumbers('character', { frames: [1, 2, 1] }),
             frameRate: 5,
         });
 
+        //pull out line animation
         this.anims.create({
             key: 'pullout',
             frames: this.anims.generateFrameNumbers('character', { frames: [1, 2, 0] }),
@@ -145,12 +177,13 @@ class MainMap extends Phaser.Scene {
             frameRate: 5,
         });
 
+        //select hook ui animation
         this.anims.create({
             key: 'hookIconSwitch',
             frames: this.anims.generateFrameNumbers('uiContainers', { frames: [6] }),
             frameRate: 500,
         });
-
+        //unselect hook ui animation
         this.anims.create({
             key: 'hookIconSwitchBack',
             frames: this.anims.generateFrameNumbers('uiContainers', { frames: [0] }),
@@ -160,26 +193,34 @@ class MainMap extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.fishCheck = false;
 
+        //creates fishing loacation
         this.fishingLocation1 = this.physics.add.staticImage(240, 380, 'uiContainers', 0);
         this.fishingLocation1.visible = false;
-
+        //makes it possible to fish at fishing location
         this.physics.add.overlap(this.fishingLocation1, this.character, function (){
             fishingPossible = true;
         });
 
+        //creates house door hitbox
         this.houseDoor = this.physics.add.staticImage(420, 132, 'uiContainers', 0);
         this.houseDoor.visible = false;
+        //moves you to house when you walk through the door
         this.physics.add.overlap(this.houseDoor, this.character, function (){
             //OPEN NEW MAP HERE
             houseScene = true;
-            console.log("Start Preload 2");
+            console.log("Start House Map");
         });
 
-
+        //when possible, allows you to fish
         this.input.keyboard.on('keydown-SPACE', function () {
             if(this.fishCheck == false && fishingPossible == true){
+                lineCast = true;
                 this.fishCheck = true;
                 fishingPossible = false;
+
+                this.character.anims.play('throw', true);
+                this.waterDrop.play();
+
                 this.time.addEvent({
                     delay: Phaser.Math.Between(1500, 2000),
                     callback: ()=>{
@@ -196,7 +237,11 @@ class MainMap extends Phaser.Scene {
                                 this.fish.active = false;
                                 this.fishCheck = false;
                                 fishingPossible = false;
-                                isCurrentlyFishing = false;
+
+                                if(lineCast == true){
+                                  this.character.anims.play('pullout', true);
+                                  lineCast = false;
+                                }
                             },
                             loop: false
                         })
@@ -232,56 +277,85 @@ class MainMap extends Phaser.Scene {
         //console.log("update")
         this.character.setVelocityX(0);
         this.character.setVelocityY(0);
+        //walk left when pressing left arrow key
         if (this.cursors.left.isDown)
         {
-            this.character.setVelocityX(-48);
+          if (this.cursors.shift.isDown){
+              this.character.setVelocityX(-96);
+              this.character.anims.play('runleft', true);
+          }else{
+              this.character.setVelocityX(-48);
+              this.character.anims.play('left', true);
+          }
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
-
-            this.character.anims.play('left', true);
             fishingPossible = false;
+            lineCast = false;
         }
+        //walk right when pressing right arrow key
         else if (this.cursors.right.isDown)
         {
-            this.character.setVelocityX(48);
+          if (this.cursors.shift.isDown){
+              this.character.setVelocityX(96);
+              this.character.anims.play('runright', true);
+          }else{
+              this.character.setVelocityX(48);
+              this.character.anims.play('right', true);
+          }
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
-
-            this.character.anims.play('right', true);
             fishingPossible = false;
+            lineCast = false;
         }
+        //walk down when pressing down arrow key
         else if (this.cursors.down.isDown) {
-            this.character.setVelocityY(48);
+          if (this.cursors.shift.isDown){
+              this.character.setVelocityY(96);
+              this.character.anims.play('rundown', true);
+          }else{
+              this.character.setVelocityY(48);
+              this.character.anims.play('down', true);
+          }
+
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
-
-            this.character.anims.play('down', true);
             fishingPossible = false;
+            lineCast = false;
         }
+        //walk up when pressing up arrow key
         else if (this.cursors.up.isDown) {
-            this.character.setVelocityY(-48);
+          if (this.cursors.shift.isDown){
+              this.character.setVelocityY(-96);
+              this.character.anims.play('runup', true);
+          }else{
+              this.character.setVelocityY(-48);
+              this.character.anims.play('up', true);
+          }
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
-
-            this.character.anims.play('up', true);
             fishingPossible = false;
+            lineCast = false;
         }
-        else if (this.cursors.space.isDown) {
-            if(fishingPossible && !isCurrentlyFishing){
-                isCurrentlyFishing = true;
-
-                if(!this.lineCast) {
-                    // this.character.setSize(16, 20);
-                    // this.character.body.offset.y = 10;
-                    this.character.anims.play('throw', true);
-                    this.waterDrop.play();
-                } else {
-                    this.character.anims.play('pullout', true);
-                }
-
-                this.lineCast = !this.lineCast;
-            }
-        }
+        //play appropriate fishing animations and sounds
+        // else if (this.cursors.space.isDown) {
+        //     if(fishingPossible && !isCurrentlyFishing){
+        //         isCurrentlyFishing = true;
+        //
+        //         if(this.lineCast == false) {
+        //             // this.character.setSize(16, 20);
+        //             // this.character.body.offset.y = 10;
+        //             this.character.anims.play('throw', true);
+        //             this.waterDrop.play();
+        //             this.lineCast = true;
+        //         } else {
+        //             this.character.anims.play('pullout', true);
+        //             this.lineCast = false;
+        //             isCurrentlyFishing = false;
+        //         }
+        //
+        //
+        //     }
+        // }
     }
 
     houseScene(){
@@ -346,7 +420,10 @@ class MainMap extends Phaser.Scene {
         fish.off('clicked', this.clickHandler);
         fish.input.enabled = false;
         fish.setVisible(false);
-
+        if(lineCast == true){
+          this.character.anims.play('pullout', true);
+          lineCast = false;
+        }
     }
 
     resetIcon1(){
