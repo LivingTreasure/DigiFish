@@ -41,13 +41,13 @@ class Preload extends Phaser.Scene {
         var sceneData = {};
         var sceneToLoad = "MainMap";
 
-        if(!Object.keys(moveData).length === 0 && !moveData.constructor === Object) {
-            sceneToLoad = moveData.currentScene;
+        if("currentScene" in moveData) {
+            sceneToLoad = moveData['currentScene'];
             sceneData['x'] = moveData.playerX;
             sceneData['y'] = moveData.playerY;
         }
 
-        if(!Object.keys(inventory).length === 0 && !inventory.constructor === Object) {
+        if(inventory) {
             sceneData['inventory'] = inventory;
         }
         

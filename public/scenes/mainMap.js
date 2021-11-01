@@ -262,10 +262,6 @@ class MainMap extends Phaser.Scene {
             this.character.setY(this.initialY);
         }
 
-        if(this.inventory == undefined) {
-            this.inventory = {};
-        }
-
         console.log(this.inventory);
     }
 
