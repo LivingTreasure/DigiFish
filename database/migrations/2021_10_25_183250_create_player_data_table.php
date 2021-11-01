@@ -17,7 +17,8 @@ class CreatePlayerDataTable extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('user_id')->constrained();
-            $table->json('move_data');
+            $table->json('move_data')->default('{}');
+            $table->json('inventory')->default('{}');
         });
     }
 

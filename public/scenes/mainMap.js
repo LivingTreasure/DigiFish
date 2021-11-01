@@ -8,6 +8,7 @@ var houseScene = false;
 var musicPlaying = false; //whether or not music is playing
 var initialX;
 var initialY;
+var inventory;
 
 
 class MainMap extends Phaser.Scene {
@@ -24,6 +25,7 @@ class MainMap extends Phaser.Scene {
 
         this.initialX = data.x;
         this.initialY = data.y;
+        this.inventory = data.inventory;
     }
 
     //loads the textures
@@ -259,12 +261,19 @@ class MainMap extends Phaser.Scene {
             this.character.setX(this.initialX);
             this.character.setY(this.initialY);
         }
+
+        if(this.inventory == undefined) {
+            this.inventory = {};
+        }
+
+        console.log(this.inventory);
     }
 
     update (time, delta) {
         this.timer += delta;
         while (this.timer > 2000) {
             this.saveMoveToDB();
+            this.saveInventoryToDB();
             this.timer -= 2000;
         }
 
@@ -372,51 +381,59 @@ class MainMap extends Phaser.Scene {
 
             inventorySpace = inventorySpace - 1;
             console.log(inventorySpace)
+            this.inventory['0'] = newFish;
 
         }else if(inventorySpace === 7){
             this.caughtFish = this.add.sprite(254, 112, 'fish', newFish);
             this.caughtFish.fixedToCamera = true;
             this.caughtFish.setScrollFactor(0)
+            this.inventory['1'] = newFish;
 
             inventorySpace = inventorySpace - 1;
         }else if(inventorySpace === 6){
             this.caughtFish = this.add.sprite(277, 112, 'fish', newFish);
             this.caughtFish.fixedToCamera = true;
             this.caughtFish.setScrollFactor(0)
+            this.inventory['2'] = newFish;
 
             inventorySpace = inventorySpace - 1;
         }else if(inventorySpace === 5){
             this.caughtFish = this.add.sprite(300, 112, 'fish', newFish);
             this.caughtFish.fixedToCamera = true;
             this.caughtFish.setScrollFactor(0)
+            this.inventory['3'] = newFish;
 
             inventorySpace = inventorySpace - 1;
         }else if(inventorySpace === 4){
             this.caughtFish = this.add.sprite(231, 136, 'fish', newFish);
             this.caughtFish.fixedToCamera = true;
             this.caughtFish.setScrollFactor(0)
+            this.inventory['4'] = newFish;
 
             inventorySpace = inventorySpace - 1;
         }else if(inventorySpace === 3){
             this.caughtFish = this.add.sprite(254, 136, 'fish', newFish);
             this.caughtFish.fixedToCamera = true;
             this.caughtFish.setScrollFactor(0)
+            this.inventory['5'] = newFish;
 
             inventorySpace = inventorySpace - 1;
         }else if(inventorySpace === 2){
             this.caughtFish = this.add.sprite(277, 136, 'fish', newFish);
             this.caughtFish.fixedToCamera = true;
             this.caughtFish.setScrollFactor(0)
+            this.inventory['6'] = newFish;
 
             inventorySpace = inventorySpace - 1;
         }else if(inventorySpace === 1){
             this.caughtFish = this.add.sprite(300, 136, 'fish', newFish);
             this.caughtFish.fixedToCamera = true;
             this.caughtFish.setScrollFactor(0)
+            this.inventory['7'] = newFish;
 
             inventorySpace = inventorySpace - 1;
         }
-
+        console.log(inventory);
         fish.off('clicked', this.clickHandler);
         fish.input.enabled = false;
         fish.setVisible(false);
@@ -645,6 +662,33 @@ class MainMap extends Phaser.Scene {
             playerX: x,
             playerY: y,
             currentScene: newScene
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+            } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+            }
+            console.log(error.config);
+        });
+    }
+
+    saveInventoryToDB(inventory = this.inventory) {
+        axios.post('/api/inventory', {
+            inventory: inventory
         })
         .then(function (response) {
             console.log(response);

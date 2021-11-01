@@ -23,4 +23,7 @@ Route::get('/', function () {
 Route::post('/api/move', [APIController::class, 'setMove']);
 Route::get('/api/move', [APIController::class, 'getMove']);
 
+Route::post('/api/inventory', [APIController::class, 'setInventory']);
+Route::get('/api/inventory', [APIController::class, 'getInventory']);
+
 Auth::routes();

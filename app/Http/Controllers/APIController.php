@@ -34,4 +34,32 @@ class APIController extends Controller
             return '{}';
         }
     }
+
+    public function setInventory(Request $request){
+        if ($request->has(['inventory'])) {
+            $inventory = $request->getContent();
+            
+            $playerData = PlayerData::updateOrCreate(
+                [
+                    'user_id' => auth()->id()
+                ],
+                [
+                    'user_id' => auth()->id(),
+                    'inventory' => $inventory
+                ]
+            );
+
+            return $request->getContent();
+        }
+    }
+
+    public function getInventory(Request $request) {
+        $playerData = auth()->user()->playerData;
+        
+        if ($playerData != null) {
+            return $playerData->inventory;
+        } else {
+            return '{}';
+        }
+    }
 }

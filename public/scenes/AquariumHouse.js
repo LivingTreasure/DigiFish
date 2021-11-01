@@ -4,6 +4,7 @@ var fishingPossible = false;
 var mainScene = false;
 var initialX;
 var initialY;
+var inventory;
 
 class AquariumHouse extends Phaser.Scene {
     //THIS SCENE IS THE HOUSE SCREEN
@@ -20,6 +21,7 @@ class AquariumHouse extends Phaser.Scene {
 
         this.initialX = data.x;
         this.initialY = data.y;
+        this.inventory = data.inventory;
     }
 
     preload () {

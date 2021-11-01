@@ -37,16 +37,30 @@ class Preload extends Phaser.Scene {
 
     async create () {
         var moveData = await this.getMoveFromDB();
+        var inventory = await this.getInventoryFromDB();
+        var sceneData = {};
+        var sceneToLoad = "MainMap";
 
         if(!Object.keys(moveData).length === 0 && !moveData.constructor === Object) {
-            this.scene.start(moveData.currentScene, {x: moveData.playerX, y: moveData.playerY});
-        } else {
-            this.scene.start("MainMap");
+            sceneToLoad = moveData.currentScene;
+            sceneData['x'] = moveData.playerX;
+            sceneData['y'] = moveData.playerY;
         }
+
+        if(!Object.keys(inventory).length === 0 && !inventory.constructor === Object) {
+            sceneData['inventory'] = inventory;
+        }
+        
+        this.scene.start(sceneToLoad, sceneData);
     }
 
     async getMoveFromDB() {
         const response = await axios.get('/api/move')
+        return response.data
+    }
+
+    async getInventoryFromDB() {
+        const response = await axios.get('/api/inventory')
         return response.data
     }
 }
