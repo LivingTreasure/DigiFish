@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\APIController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,5 +26,7 @@ Route::get('/api/move', [APIController::class, 'getMove']);
 
 Route::post('/api/inventory', [APIController::class, 'setInventory']);
 Route::get('/api/inventory', [APIController::class, 'getInventory']);
+
+Route::get('/logout', [HomeController::class, 'logout']);
 
 Auth::routes();
