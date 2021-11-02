@@ -32,6 +32,11 @@ class Preload extends Phaser.Scene {
             frameHeight: 16
         })
 
+        this.load.spritesheet('guiIcons', 'assets/Images/GUI_Pack/Icons/Menu_Icons_16x16.png', {
+            frameWidth: 16,
+            frameHeight: 16
+        })
+
 
     }
 

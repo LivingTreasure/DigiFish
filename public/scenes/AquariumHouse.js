@@ -5,6 +5,12 @@ var mainScene = false;
 var initialX;
 var initialY;
 var inventory;
+var aquariumInterface = false;
+var border;
+var Aquainterface;
+var closeAquarium;
+var activeAquarium = true;
+
 
 class AquariumHouse extends Phaser.Scene {
     //THIS SCENE IS THE HOUSE SCREEN
@@ -75,8 +81,6 @@ class AquariumHouse extends Phaser.Scene {
         this.character = this.physics.add.sprite(90, 180, 'walking', 11);
         this.character.setSize(16, 5);
 
-//        this.lineCast = true;
-
         //adds music
         this.waterDrop = this.sound.add('water_drop');
         this.music = this.sound.add('music');
@@ -89,13 +93,7 @@ class AquariumHouse extends Phaser.Scene {
           loop: true,
           delay: 0
         }
-//        this.music.play(musicConfig);
 
-//        this.createUserInterface();
-
-        // this.character.setOrigin(0.5, 1);
-
-        //this.character.setCollideWorldBounds(true);
         //makes character collide with walls and items
         walls.setCollisionByProperty({ collides: true });
         objs1.setCollisionByProperty({ collides: true });
@@ -106,11 +104,9 @@ class AquariumHouse extends Phaser.Scene {
         this.physics.add.collider(this.character, objs2);
         this.physics.add.collider(this.character, objs3);
 
-        // this.character.setDepth(10);
         this.cameras.main.setZoom(1)
         this.cameras.main.startFollow(this.character);
         this.cameras.main.roundPixels = true;
-        // this.cameras.main.zoom = 0.5;
 
         //walking right animation (EC)
         this.anims.create({
@@ -164,24 +160,14 @@ class AquariumHouse extends Phaser.Scene {
             mainScene = true;
         });
 
-        // this.input.keyboard.on('keydown-SPACE', function () {
-        //     if(this.fishCheck == false && fishingPossible == true){
-        //         this.fishCheck = true;
-        //         fishingPossible = false;
-        //         this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', Phaser.Math.Between(18, 126));
-        //
-        //         this.time.addEvent({
-        //             delay: Phaser.Math.Between(1500, 2000),
-        //             callback: ()=>{
-        //                 this.fish.visible = false;
-        //                 this.fish.active = false;
-        //                 this.fishCheck = false;
-        //                 fishingPossible = false;
-        //             },
-        //             loop: false
-        //         })
-        //     }
-        // }, this);
+        //allows character to interact with aquarium
+        this.aquarium = this.physics.add.staticImage(140, 35, 'uiContainers', 0);
+        this.aquarium.visible = false;
+        this.physics.add.overlap(this.aquarium, this.character, function (){
+            //Create aquarium interface
+            aquariumInterface = true;
+            activeAquarium = true;
+        });
 
         if(this.initialX != undefined && this.initialY != undefined) {
             this.character.setX(this.initialX);
@@ -191,9 +177,51 @@ class AquariumHouse extends Phaser.Scene {
         if(this.inventory == undefined) {
             this.inventory = {};
         }
+
+        this.input.on('gameobjectup', function (pointer, gameObject){
+            gameObject.emit('clicked', gameObject);
+        }, this);
+
+
+
+                    //Background
+                    let x = 60;
+                    let y = 30;
+                    let w = 200;
+                    let h = 100;
+                
+                    Aquainterface  = this.add.graphics({x: x, y: y})
+                    border     = this.add.graphics({x: x, y: y})
+        
+                    closeAquarium = this.add.sprite(260, 30, 'guiIcons', 27);
+                    closeAquarium.setInteractive();
+                    closeAquarium.on('clicked', this.clickHandler, this);
+                    closeAquarium.visible = false;
+        
+                    closeAquarium.fixedToCamera = true;
+                    closeAquarium.setScrollFactor(0);
+                
+                    Aquainterface.clear();
+                    Aquainterface.fillStyle('0x4D6592', 1);
+                    Aquainterface.fillRect(0, 0, w, h);
+                    Aquainterface.fixedToCamera = true;
+                    Aquainterface.setScrollFactor(0);
+                    Aquainterface.visible = false;
+                
+                    border.clear();
+                    border.lineStyle(2, '0x965D37', 1);
+                    border.strokeRect(0, 0, w, h);
+                    border.fixedToCamera = true;
+                    border.setScrollFactor(0)
+                    border.visible = false;
     }
 
     update (time, delta) {
+
+        if(aquariumInterface){
+            this.createAquariumInterface();
+        }
+
         this.timer += delta;
         while (this.timer > 2000) {
             this.saveMoveToDB();
@@ -219,6 +247,7 @@ class AquariumHouse extends Phaser.Scene {
             this.character.body.offset.y = 10;
 
             this.character.anims.play('left', true);
+            aquariumInterface = false;
         }
         //walk right when pressing right arrow key
         else if (this.cursors.right.isDown){
@@ -227,6 +256,7 @@ class AquariumHouse extends Phaser.Scene {
             this.character.body.offset.y = 10;
 
             this.character.anims.play('right', true);
+            aquariumInterface = false;
         }
         //walk down when pressing down arrow key
         else if (this.cursors.down.isDown) {
@@ -235,6 +265,7 @@ class AquariumHouse extends Phaser.Scene {
             this.character.body.offset.y = 10;
 
             this.character.anims.play('down', true);
+            aquariumInterface = false;
         }
         //walk up when pressing up arrow key
         else if (this.cursors.up.isDown) {
@@ -243,7 +274,29 @@ class AquariumHouse extends Phaser.Scene {
             this.character.body.offset.y = 10;
 
             this.character.anims.play('up', true);
+            aquariumInterface = false;
         }
+    }
+
+    createAquariumInterface(){
+
+        if(!activeAquarium){
+            border.visible = false;
+            closeAquarium.visible = false;
+            Aquainterface.visible = false;
+        }else{
+
+            border.visible = true;
+            closeAquarium.visible = true;
+            Aquainterface.visible = true;
+
+        }
+
+    }
+
+    clickHandler(closeAquarium){
+        activeAquarium = false;
+        this.createAquariumInterface();
     }
 
     // resetIcon1(){
