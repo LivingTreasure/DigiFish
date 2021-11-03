@@ -10,6 +10,7 @@ var border;
 var Aquainterface;
 var closeAquarium;
 var activeAquarium = true;
+var fish1;
 
 
 class AquariumHouse extends Phaser.Scene {
@@ -184,36 +185,36 @@ class AquariumHouse extends Phaser.Scene {
 
 
 
-                    //Background
-                    let x = 60;
-                    let y = 30;
-                    let w = 200;
-                    let h = 100;
-                
-                    Aquainterface  = this.add.graphics({x: x, y: y})
-                    border     = this.add.graphics({x: x, y: y})
-        
-                    closeAquarium = this.add.sprite(260, 30, 'guiIcons', 27);
-                    closeAquarium.setInteractive();
-                    closeAquarium.on('clicked', this.clickHandler, this);
-                    closeAquarium.visible = false;
-        
-                    closeAquarium.fixedToCamera = true;
-                    closeAquarium.setScrollFactor(0);
-                
-                    Aquainterface.clear();
-                    Aquainterface.fillStyle('0x4D6592', 1);
-                    Aquainterface.fillRect(0, 0, w, h);
-                    Aquainterface.fixedToCamera = true;
-                    Aquainterface.setScrollFactor(0);
-                    Aquainterface.visible = false;
-                
-                    border.clear();
-                    border.lineStyle(2, '0x965D37', 1);
-                    border.strokeRect(0, 0, w, h);
-                    border.fixedToCamera = true;
-                    border.setScrollFactor(0)
-                    border.visible = false;
+        //BUILDS AQUARIUM
+        let x = 60;
+        let y = 30;
+        let w = 200;
+        let h = 100;
+    
+        Aquainterface   = this.add.graphics({x: x, y: y})
+        border          = this.add.graphics({x: x, y: y})
+
+        closeAquarium = this.add.sprite(260, 30, 'guiIcons', 27);
+        closeAquarium.setInteractive();
+        closeAquarium.on('clicked', this.clickHandler, this);
+        closeAquarium.visible = false;
+
+        closeAquarium.fixedToCamera = true;
+        closeAquarium.setScrollFactor(0);
+    
+        Aquainterface.clear();
+        Aquainterface.fillStyle('0x4D6592', 1);
+        Aquainterface.fillRect(0, 0, w, h);
+        Aquainterface.fixedToCamera = true;
+        Aquainterface.setScrollFactor(0);
+        Aquainterface.visible = false;
+    
+        border.clear();
+        border.lineStyle(2, '0x965D37', 1);
+        border.strokeRect(0, 0, w, h);
+        border.fixedToCamera = true;
+        border.setScrollFactor(0)
+        border.visible = false;
     }
 
     update (time, delta) {
@@ -284,11 +285,20 @@ class AquariumHouse extends Phaser.Scene {
             border.visible = false;
             closeAquarium.visible = false;
             Aquainterface.visible = false;
+            fish1.visible = false;
         }else{
 
             border.visible = true;
             closeAquarium.visible = true;
             Aquainterface.visible = true;
+
+            fish1 = this.physics.add.sprite(140, 35, 'fish', 123);
+            fish1.setVelocity(30, 40);
+            fish1.setBounce(1, 1);
+            fish1.setCollideWorldBounds(true);
+            fish1.fixedToCamera = true;
+            fish1.setScrollFactor(0)
+            fish1.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
 
         }
 

@@ -273,7 +273,7 @@ class MainMap extends Phaser.Scene {
 
         console.log(this.inventory);
 
-        console.log(this.inventory.inventory.inventory.inventory.inventory.inventory[0]);
+        console.log("inv: " + this.inventory[0]);
     }
 
     update (time, delta) {
@@ -656,6 +656,7 @@ class MainMap extends Phaser.Scene {
     }
 
     saveMoveToDB(newScene = this.getSceneName(), x = this.character.x, y = this.character.y) {
+
         axios.post('/api/move', {
             playerX: x,
             playerY: y,
@@ -684,7 +685,9 @@ class MainMap extends Phaser.Scene {
         });
     }
 
-    saveInventoryToDB(inventory = this.inventory) {
+    saveInventoryToDB(inventory = this.newFish) {
+        console.log("check: " + this.inventory);
+
         axios.post('/api/inventory', {
             inventory: inventory
         })
