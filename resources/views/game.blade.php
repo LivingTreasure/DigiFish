@@ -36,12 +36,13 @@
     <script src="scenes/preload.js"></script>
     <script src="scenes/mainMap.js"></script>
     <script src="scenes/AquariumHouse.js"></script>
+    <script src="scenes/DigiShop.js"></script>
     <!--SCRIPTS -->
     <script src="javaScript/app.js"></script>
     <script src="javaScript/main.js"></script>
 
     <script>
-        
+
     </script>
 </head>
 

@@ -5,6 +5,7 @@ var newFish = 0;
 inventorySpace = 8;
 var lineCast;
 var houseScene = false;
+var shopScene = false;
 var musicPlaying = false; //whether or not music is playing
 var initialX;
 var initialY;
@@ -67,9 +68,9 @@ class MainMap extends Phaser.Scene {
         //adds character to map
         //FIX LATER: THIS LOCATION NEEDS TO CHANGE DEPENDING ON WHAT DOOR YOU COME FROM
         this.character = this.physics.add.sprite(420, 160, 'walking', 0);
-
+        //this.character.setBounce(0, 0);
         this.character.setSize(16, 5);
-
+        //this.character.body.offset.y = 18;
 
 
         //configures music
@@ -84,7 +85,6 @@ class MainMap extends Phaser.Scene {
           loop: true,
           delay: 0
         }
-
         //plays music if music is not already playing
         if(musicPlaying == false){
             this.music.play(musicConfig);
@@ -94,6 +94,9 @@ class MainMap extends Phaser.Scene {
         //runs function that makes the user interface
         this.createUserInterface();
 
+        // this.character.setOrigin(0.5, 1);
+
+        //this.character.setCollideWorldBounds(true);
         //makes character collide wih objects and water
         water.setCollisionByProperty({ collides: true });
         objs.setCollisionByProperty({ collides: true });
@@ -183,7 +186,6 @@ class MainMap extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('uiContainers', { frames: [6] }),
             frameRate: 500,
         });
-
         //unselect hook ui animation
         this.anims.create({
             key: 'hookIconSwitchBack',
@@ -197,7 +199,6 @@ class MainMap extends Phaser.Scene {
         //creates fishing loacation
         this.fishingLocation1 = this.physics.add.staticImage(240, 380, 'uiContainers', 0);
         this.fishingLocation1.visible = false;
-
         //makes it possible to fish at fishing location
         this.physics.add.overlap(this.fishingLocation1, this.character, function (){
             fishingPossible = true;
@@ -206,12 +207,21 @@ class MainMap extends Phaser.Scene {
         //creates house door hitbox
         this.houseDoor = this.physics.add.staticImage(420, 132, 'uiContainers', 0);
         this.houseDoor.visible = false;
-
         //moves you to house when you walk through the door
         this.physics.add.overlap(this.houseDoor, this.character, function (){
             //OPEN NEW MAP HERE
             houseScene = true;
             console.log("Start House Map");
+        });
+
+        //creates shop door hitbox
+        this.shopDoor = this.physics.add.staticImage(212, 132, 'uiContainers', 0);
+        this.shopDoor.visible = false;
+        //moves you to shop when you walk through the door
+        this.physics.add.overlap(this.shopDoor, this.character, function (){
+            //OPEN NEW MAP HERE
+            shopScene = true;
+            console.log("Start Shop Map");
         });
 
         //when possible, allows you to fish
@@ -264,16 +274,10 @@ class MainMap extends Phaser.Scene {
         }
 
         if(this.inventory == undefined) {
-            console.log("empty")
             this.inventory = {};
-        }else{
-            console.log("found")
-            this.fillInventory();
         }
 
         console.log(this.inventory);
-
-        console.log("inv: " + this.inventory[0]);
     }
 
     update (time, delta) {
@@ -290,10 +294,15 @@ class MainMap extends Phaser.Scene {
             this.scene.start('AquariumHouse');
         }
 
+        if(shopScene){
+            shopScene = false;
+            this.saveMoveToDB('DigiShop', 90, 178);
+            this.scene.start('DigiShop');
+        }
+
         //console.log("update")
         this.character.setVelocityX(0);
         this.character.setVelocityY(0);
-
         //walk left when pressing left arrow key
         if (this.cursors.left.isDown)
         {
@@ -375,62 +384,76 @@ class MainMap extends Phaser.Scene {
         // }
     }
 
-    fillInventory(){
-        this.arrayLength = this.inventory.length;
-        console.log("length: " + this.inventory)
-        for (var i = 0; i < this.arrayLength; i++) {
-            console.log("in inv")
-            if(this.inventory[i] != undefined){
-                if(this.inventory[i].index === 0){
-                    this.caughtFish = this.add.sprite(231, 112, 'fish', inventory[i]);
-                }
+    houseScene(){
+        this.scene.start('Preload');
+    }
 
-            }
-        }
+    shopScene(){
+        this.scene.start('Preload');
     }
 
     //triggered when fish is clicked on
     clickHandler(fish){
-        console.log("array: " + this.inventory[0])
-        if(this.inventory[0] === undefined){
+        console.log(inventorySpace)
+        if(inventorySpace === 8){
             this.caughtFish = this.add.sprite(231, 112, 'fish', newFish);
+            this.caughtFish.fixedToCamera = true;
+            this.caughtFish.setScrollFactor(0)
 
+            inventorySpace = inventorySpace - 1;
             console.log(inventorySpace)
             this.inventory['0'] = newFish;
 
-        }else if(this.inventory[1] === undefined){
+        }else if(inventorySpace === 7){
             this.caughtFish = this.add.sprite(254, 112, 'fish', newFish);
+            this.caughtFish.fixedToCamera = true;
+            this.caughtFish.setScrollFactor(0)
             this.inventory['1'] = newFish;
 
-        }else if(this.inventory[2] === undefined){
+            inventorySpace = inventorySpace - 1;
+        }else if(inventorySpace === 6){
             this.caughtFish = this.add.sprite(277, 112, 'fish', newFish);
+            this.caughtFish.fixedToCamera = true;
+            this.caughtFish.setScrollFactor(0)
             this.inventory['2'] = newFish;
 
-        }else if(this.inventory[3] === undefined){
+            inventorySpace = inventorySpace - 1;
+        }else if(inventorySpace === 5){
             this.caughtFish = this.add.sprite(300, 112, 'fish', newFish);
+            this.caughtFish.fixedToCamera = true;
+            this.caughtFish.setScrollFactor(0)
             this.inventory['3'] = newFish;
 
-        }else if(this.inventory[4] === undefined){
+            inventorySpace = inventorySpace - 1;
+        }else if(inventorySpace === 4){
             this.caughtFish = this.add.sprite(231, 136, 'fish', newFish);
+            this.caughtFish.fixedToCamera = true;
+            this.caughtFish.setScrollFactor(0)
             this.inventory['4'] = newFish;
 
-        }else if(this.inventory[5] === undefined){
+            inventorySpace = inventorySpace - 1;
+        }else if(inventorySpace === 3){
             this.caughtFish = this.add.sprite(254, 136, 'fish', newFish);
+            this.caughtFish.fixedToCamera = true;
+            this.caughtFish.setScrollFactor(0)
             this.inventory['5'] = newFish;
 
-        }else if(this.inventory[6] === undefined){
+            inventorySpace = inventorySpace - 1;
+        }else if(inventorySpace === 2){
             this.caughtFish = this.add.sprite(277, 136, 'fish', newFish);
+            this.caughtFish.fixedToCamera = true;
+            this.caughtFish.setScrollFactor(0)
             this.inventory['6'] = newFish;
 
-        }else if(this.inventory[7] === undefined){
+            inventorySpace = inventorySpace - 1;
+        }else if(inventorySpace === 1){
             this.caughtFish = this.add.sprite(300, 136, 'fish', newFish);
+            this.caughtFish.fixedToCamera = true;
+            this.caughtFish.setScrollFactor(0)
             this.inventory['7'] = newFish;
 
+            inventorySpace = inventorySpace - 1;
         }
-
-        this.caughtFish.fixedToCamera = true;
-        this.caughtFish.setScrollFactor(0)
-
         console.log(inventory);
         fish.off('clicked', this.clickHandler);
         fish.input.enabled = false;
@@ -656,7 +679,6 @@ class MainMap extends Phaser.Scene {
     }
 
     saveMoveToDB(newScene = this.getSceneName(), x = this.character.x, y = this.character.y) {
-
         axios.post('/api/move', {
             playerX: x,
             playerY: y,
@@ -685,9 +707,7 @@ class MainMap extends Phaser.Scene {
         });
     }
 
-    saveInventoryToDB(inventory = this.newFish) {
-        console.log("check: " + this.inventory);
-
+    saveInventoryToDB(inventory = this.inventory) {
         axios.post('/api/inventory', {
             inventory: inventory
         })

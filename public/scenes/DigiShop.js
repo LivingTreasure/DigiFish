@@ -2,12 +2,13 @@ var timedEvent;
 var text;
 var fishingPossible = false;
 var mainScene = false;
+var houseScene = false;
 var initialX;
 var initialY;
 var inventory;
 
 class DigiShop extends Phaser.Scene {
-    //THIS SCENE IS THE HOUSE SCREEN
+    //THIS SCENE IS THE SHOP SCREEN
     constructor () {
 
         super({key: 'DigiShop', active: false})
@@ -26,16 +27,16 @@ class DigiShop extends Phaser.Scene {
 
     preload () {
         //loads textures
-        this.load.image('turtle', 'assets/images/Modern_Interiors/tankwalls.png')
+        this.load.image('generic', 'assets/images/Modern_Interiors/Theme_Sorter/1_Generic_16x16.png')
         this.load.image('grocery', 'assets/images/Modern_Interiors/Theme_Sorter/16_Grocery_store_16x16.png')
-        this.load.image('generic', 'assets/characters/TurtleForTable.png')
+        this.load.image('turtle', 'assets/characters/TurtleForTable.png')
         this.load.spritesheet('character', 'assets/characters/char1_fishingrod_animation_32x32.png', {
             frameWidth: 32,
             frameHeight: 32
         })
 
         // load the JSON file
-        this.load.tilemapTiledJSON('mapStore', 'assets/json/AquariumHouse.json')
+        this.load.tilemapTiledJSON('mapStore', 'assets/json/DigiShop.json')
 
         // load audio
         this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
@@ -44,7 +45,7 @@ class DigiShop extends Phaser.Scene {
 
     async create () {
         //makes map
-        const mapHome = this.make.tilemap({ key: 'mapStore'})
+        const mapStore = this.make.tilemap({ key: 'mapStore'})
         //assigns textures to tilesets
         const tileset = mapStore.addTilesetImage('TurtleForTable','turtle')
         const tileset2 = mapStore.addTilesetImage('16_Grocery_store_16x16','grocery')
@@ -54,13 +55,13 @@ class DigiShop extends Phaser.Scene {
         const allLayers = [tileset, tileset2, tileset3]
 
         //creates layers
-        var floor = mapStore.createLayer('BackGround', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var backGround = mapStore.createLayer('BackGround', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var walls = mapStore.createLayer('Walls', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        var objs1 = mapStore.createLayer('Shelves', allLayers, 0, 0).setScale(this.assetsScaleFactor)
-        var objs2 = mapStore.createLayer('Objects', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var shelves = mapStore.createLayer('Shelves', allLayers, 0, 0).setScale(this.assetsScaleFactor)
+        var objects = mapStore.createLayer('Objects', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
         //adds character to map
-        this.character = this.physics.add.sprite(90, 180, 'walking', 11);
+        this.character = this.physics.add.sprite(100, 180, 'walking', 11);
         this.character.setSize(16, 5);
 
 //        this.lineCast = true;
@@ -85,14 +86,14 @@ class DigiShop extends Phaser.Scene {
 
         //this.character.setCollideWorldBounds(true);
         //makes character collide with walls and items
-        Walls.setCollisionByProperty({ collides: true });
-        BackGround.setCollisionByProperty({ collides: true });
-        Shelves.setCollisionByProperty({ collides: true });
-        Objects.setCollisionByProperty({ collides: true });
-        this.physics.add.collider(this.character, Walls);
-        this.physics.add.collider(this.character, Background);
-        this.physics.add.collider(this.character, Shelves);
-        this.physics.add.collider(this.character, Objects);
+        walls.setCollisionByProperty({ collides: true });
+        backGround.setCollisionByProperty({ collides: true });
+        shelves.setCollisionByProperty({ collides: true });
+        objects.setCollisionByProperty({ collides: true });
+        this.physics.add.collider(this.character, walls);
+        this.physics.add.collider(this.character, backGround);
+        this.physics.add.collider(this.character, shelves);
+        this.physics.add.collider(this.character, objects);
 
         // this.character.setDepth(10);
         this.cameras.main.setZoom(1)
@@ -145,9 +146,9 @@ class DigiShop extends Phaser.Scene {
         this.fishCheck = false;
 
         //allows character to exit door
-        this.houseDoor = this.physics.add.staticImage(90, 215, 'uiContainers', 0);
-        this.houseDoor.visible = false;
-        this.physics.add.overlap(this.houseDoor, this.character, function (){
+        this.shopDoor = this.physics.add.staticImage(168, 220, 'uiContainers', 0);
+        this.shopDoor.visible = false;
+        this.physics.add.overlap(this.shopDoor, this.character, function (){
             //OPEN NEW MAP HERE
             mainScene = true;
         });
@@ -440,7 +441,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     getSceneName() {
-        return "AquariumHouse";
+        return "DigiShop";
     }
 
     saveMoveToDB(newScene = this.getSceneName(), x = this.character.x, y = this.character.y) {

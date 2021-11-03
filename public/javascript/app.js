@@ -14,6 +14,7 @@ App.prototype.start = function() {
     scenes.push(Boot);
     scenes.push(Preload);
     scenes.push(MainMap);
+    scenes.push(DigiShop);
     scenes.push(AquariumHouse);
 
     //GAME CONFIG

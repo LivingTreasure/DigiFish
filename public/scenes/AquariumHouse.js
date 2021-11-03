@@ -2,6 +2,7 @@ var timedEvent;
 var text;
 var fishingPossible = false;
 var mainScene = false;
+var shopScene = false;
 var initialX;
 var initialY;
 var inventory;
@@ -190,7 +191,7 @@ class AquariumHouse extends Phaser.Scene {
         let y = 30;
         let w = 200;
         let h = 100;
-    
+
         Aquainterface   = this.add.graphics({x: x, y: y})
         border          = this.add.graphics({x: x, y: y})
 
@@ -201,14 +202,14 @@ class AquariumHouse extends Phaser.Scene {
 
         closeAquarium.fixedToCamera = true;
         closeAquarium.setScrollFactor(0);
-    
+
         Aquainterface.clear();
         Aquainterface.fillStyle('0x4D6592', 1);
         Aquainterface.fillRect(0, 0, w, h);
         Aquainterface.fixedToCamera = true;
         Aquainterface.setScrollFactor(0);
         Aquainterface.visible = false;
-    
+
         border.clear();
         border.lineStyle(2, '0x965D37', 1);
         border.strokeRect(0, 0, w, h);
