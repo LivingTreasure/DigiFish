@@ -265,7 +265,7 @@ class MainMap extends Phaser.Scene {
 
         if(this.inventory == undefined) {
             console.log("empty")
-            this.inventory = {};
+            this.inventory = [];
         }else{
             console.log("found")
             this.fillInventory();
@@ -273,7 +273,7 @@ class MainMap extends Phaser.Scene {
 
         console.log(this.inventory);
 
-        console.log("inv: " + this.inventory[0]);
+        console.log("inv: " + this.inventory['0']);
     }
 
     update (time, delta) {
@@ -381,52 +381,14 @@ class MainMap extends Phaser.Scene {
         for (var i = 0; i < this.arrayLength; i++) {
             console.log("in inv")
             if(this.inventory[i] != undefined){
-                if(this.inventory[i].index === 0){
-                    this.caughtFish = this.add.sprite(231, 112, 'fish', inventory[i]);
-                }
-
+                console.log(this.inventory);
+                this.addFishToInventory(this.inventory[i]); // call add sprite method here
             }
         }
     }
 
-    //triggered when fish is clicked on
     clickHandler(fish){
-        console.log("array: " + this.inventory[0])
-        if(this.inventory[0] === undefined){
-            this.caughtFish = this.add.sprite(231, 112, 'fish', newFish);
-
-            console.log(inventorySpace)
-            this.inventory['0'] = newFish;
-
-        }else if(this.inventory[1] === undefined){
-            this.caughtFish = this.add.sprite(254, 112, 'fish', newFish);
-            this.inventory['1'] = newFish;
-
-        }else if(this.inventory[2] === undefined){
-            this.caughtFish = this.add.sprite(277, 112, 'fish', newFish);
-            this.inventory['2'] = newFish;
-
-        }else if(this.inventory[3] === undefined){
-            this.caughtFish = this.add.sprite(300, 112, 'fish', newFish);
-            this.inventory['3'] = newFish;
-
-        }else if(this.inventory[4] === undefined){
-            this.caughtFish = this.add.sprite(231, 136, 'fish', newFish);
-            this.inventory['4'] = newFish;
-
-        }else if(this.inventory[5] === undefined){
-            this.caughtFish = this.add.sprite(254, 136, 'fish', newFish);
-            this.inventory['5'] = newFish;
-
-        }else if(this.inventory[6] === undefined){
-            this.caughtFish = this.add.sprite(277, 136, 'fish', newFish);
-            this.inventory['6'] = newFish;
-
-        }else if(this.inventory[7] === undefined){
-            this.caughtFish = this.add.sprite(300, 136, 'fish', newFish);
-            this.inventory['7'] = newFish;
-
-        }
+        this.addFishToInventory(newFish);
 
         this.caughtFish.fixedToCamera = true;
         this.caughtFish.setScrollFactor(0)
@@ -438,6 +400,46 @@ class MainMap extends Phaser.Scene {
         if(lineCast == true){
           this.character.anims.play('pullout', true);
           lineCast = false;
+        }
+    }
+
+    //triggered when fish is clicked on
+    addFishToInventory(newFish){
+        console.log("array: " + this.inventory[0])
+        if(this.inventory[0] === undefined){
+            this.caughtFish = this.add.sprite(231, 112, 'fish', newFish); // move these to seperate method
+
+            console.log(inventorySpace)
+            this.inventory[0] = newFish;
+
+        }else if(this.inventory[1] === undefined){
+            this.caughtFish = this.add.sprite(254, 112, 'fish', newFish);
+            this.inventory[1] = newFish;
+
+        }else if(this.inventory[2] === undefined){
+            this.caughtFish = this.add.sprite(277, 112, 'fish', newFish);
+            this.inventory[2] = newFish;
+
+        }else if(this.inventory[3] === undefined){
+            this.caughtFish = this.add.sprite(300, 112, 'fish', newFish);
+            this.inventory[3] = newFish;
+
+        }else if(this.inventory[4] === undefined){
+            this.caughtFish = this.add.sprite(231, 136, 'fish', newFish);
+            this.inventory[4] = newFish;
+
+        }else if(this.inventory[5] === undefined){
+            this.caughtFish = this.add.sprite(254, 136, 'fish', newFish);
+            this.inventory[5] = newFish;
+
+        }else if(this.inventory[6] === undefined){
+            this.caughtFish = this.add.sprite(277, 136, 'fish', newFish);
+            this.inventory[6] = newFish;
+
+        }else if(this.inventory[7] === undefined){
+            this.caughtFish = this.add.sprite(300, 136, 'fish', newFish);
+            this.inventory[7] = newFish;
+
         }
     }
 
@@ -685,11 +687,11 @@ class MainMap extends Phaser.Scene {
         });
     }
 
-    saveInventoryToDB(inventory = this.newFish) {
+    saveInventoryToDB() {
         console.log("check: " + this.inventory);
 
         axios.post('/api/inventory', {
-            inventory: inventory
+            inventory: this.inventory
         })
         .then(function (response) {
             console.log(response);
