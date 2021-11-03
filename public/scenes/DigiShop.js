@@ -30,6 +30,7 @@ class DigiShop extends Phaser.Scene {
         this.load.image('generic', 'assets/images/Modern_Interiors/Theme_Sorter/1_Generic_16x16.png')
         this.load.image('grocery', 'assets/images/Modern_Interiors/Theme_Sorter/16_Grocery_store_16x16.png')
         this.load.image('turtle', 'assets/characters/TurtleForTable.png')
+        this.load.image('fishingitems', 'assets/images/Modern_Interiors/Theme_Sorter/9_Fishing_16x16.png')
         this.load.spritesheet('character', 'assets/characters/char1_fishingrod_animation_32x32.png', {
             frameWidth: 32,
             frameHeight: 32
@@ -50,9 +51,10 @@ class DigiShop extends Phaser.Scene {
         const tileset = mapStore.addTilesetImage('TurtleForTable','turtle')
         const tileset2 = mapStore.addTilesetImage('16_Grocery_store_16x16','grocery')
         const tileset3 = mapStore.addTilesetImage('1_Generic_16x16','generic')
+        const tileset4 = mapStore.addTilesetImage('9_Fishing_16x16','fishingitems')
 
         //adds tilesets to layers
-        const allLayers = [tileset, tileset2, tileset3]
+        const allLayers = [tileset, tileset2, tileset3, tileset4]
 
         //creates layers
         var backGround = mapStore.createLayer('BackGround', allLayers, 0, 0).setScale(this.assetsScaleFactor)
@@ -61,7 +63,7 @@ class DigiShop extends Phaser.Scene {
         var objects = mapStore.createLayer('Objects', allLayers, 0, 0).setScale(this.assetsScaleFactor)
 
         //adds character to map
-        this.character = this.physics.add.sprite(100, 180, 'walking', 11);
+        this.character = this.physics.add.sprite(160, 160, 'walking', 11);
         this.character.setSize(16, 5);
 
 //        this.lineCast = true;
@@ -146,7 +148,7 @@ class DigiShop extends Phaser.Scene {
         this.fishCheck = false;
 
         //allows character to exit door
-        this.shopDoor = this.physics.add.staticImage(168, 220, 'uiContainers', 0);
+        this.shopDoor = this.physics.add.staticImage(160, 188, 'uiContainers', 0);
         this.shopDoor.visible = false;
         this.physics.add.overlap(this.shopDoor, this.character, function (){
             //OPEN NEW MAP HERE
