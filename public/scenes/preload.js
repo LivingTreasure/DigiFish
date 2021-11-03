@@ -52,8 +52,8 @@ class Preload extends Phaser.Scene {
             sceneData['y'] = moveData.playerY;
         }
 
-        if(inventory) {
-            sceneData['inventory'] = inventory;
+        if(inventory && inventory.length !== 0) {
+            sceneData['inventory'] = inventory.inventory;
         }
         
         this.scene.start(sceneToLoad, sceneData);
