@@ -2,7 +2,6 @@ var timedEvent;
 var text;
 var fishingPossible = false;
 var newFish = 0;
-inventorySpace = 8;
 var lineCast;
 var houseScene = false;
 var shopScene = false;
@@ -66,11 +65,12 @@ class MainMap extends Phaser.Scene {
         var water = map.createLayer('Water', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         var objs = map.createLayer('Objs', allLayers, 0, 0).setScale(this.assetsScaleFactor)
         //adds character to map
+
         //FIX LATER: THIS LOCATION NEEDS TO CHANGE DEPENDING ON WHAT DOOR YOU COME FROM
         this.character = this.physics.add.sprite(420, 160, 'walking', 0);
-        //this.character.setBounce(0, 0);
+
         this.character.setSize(16, 5);
-        //this.character.body.offset.y = 18;
+
 
 
         //configures music
@@ -94,9 +94,6 @@ class MainMap extends Phaser.Scene {
         //runs function that makes the user interface
         this.createUserInterface();
 
-        // this.character.setOrigin(0.5, 1);
-
-        //this.character.setCollideWorldBounds(true);
         //makes character collide wih objects and water
         water.setCollisionByProperty({ collides: true });
         objs.setCollisionByProperty({ collides: true });
@@ -107,7 +104,6 @@ class MainMap extends Phaser.Scene {
         this.cameras.main.setZoom(1)
         this.cameras.main.startFollow(this.character);
         this.cameras.main.roundPixels = true;
-        // this.cameras.main.zoom = 0.5;
 
         //walking right animation (EC)
         this.anims.create({
@@ -274,7 +270,11 @@ class MainMap extends Phaser.Scene {
         }
 
         if(this.inventory == undefined) {
-            this.inventory = {};
+            console.log("undef: " + this.inventory);
+            this.inventory = [];
+        }else{
+            this.fillInventory();
+            console.log(this.inventory);
         }
 
         console.log(this.inventory);
@@ -300,9 +300,9 @@ class MainMap extends Phaser.Scene {
             this.scene.start('DigiShop');
         }
 
-        //console.log("update")
         this.character.setVelocityX(0);
         this.character.setVelocityY(0);
+
         //walk left when pressing left arrow key
         if (this.cursors.left.isDown)
         {
@@ -318,6 +318,7 @@ class MainMap extends Phaser.Scene {
             fishingPossible = false;
             lineCast = false;
         }
+
         //walk right when pressing right arrow key
         else if (this.cursors.right.isDown)
         {
@@ -333,6 +334,7 @@ class MainMap extends Phaser.Scene {
             fishingPossible = false;
             lineCast = false;
         }
+
         //walk down when pressing down arrow key
         else if (this.cursors.down.isDown) {
           if (this.cursors.shift.isDown){
@@ -348,6 +350,7 @@ class MainMap extends Phaser.Scene {
             fishingPossible = false;
             lineCast = false;
         }
+
         //walk up when pressing up arrow key
         else if (this.cursors.up.isDown) {
           if (this.cursors.shift.isDown){
@@ -392,69 +395,90 @@ class MainMap extends Phaser.Scene {
         this.scene.start('Preload');
     }
 
+    fillInventory(){
+        this.arrayLength = this.inventory.length;
+        for (var i = 0; i < this.arrayLength; i++) {
+            console.log("in inv")
+            if(this.inventory[i] != undefined){
+                this.addFishToInventory(this.inventory[i]); // call add sprite method here
+            }
+        }
+    }
+
+    //reloads inventory from database
+    addFishToInventory(dbFish){
+        if(this.inventory['0'] === dbFish){
+            this.caughtFish = this.add.sprite(231, 112, 'fish', dbFish);
+
+        }else if(this.inventory['1'] === dbFish){
+            this.caughtFish = this.add.sprite(254, 112, 'fish', dbFish);
+
+        }else if(this.inventory['2'] === dbFish){
+            this.caughtFish = this.add.sprite(277, 112, 'fish', dbFish);
+
+        }else if(this.inventory['3'] === dbFish){
+            this.caughtFish = this.add.sprite(300, 112, 'fish', dbFish);
+
+        }else if(this.inventory['4'] === dbFish){
+            this.caughtFish = this.add.sprite(231, 136, 'fish', dbFish);
+
+        }else if(this.inventory['5'] === dbFish){
+            this.caughtFish = this.add.sprite(254, 136, 'fish', dbFish);
+
+        }else if(this.inventory['6'] === dbFish){
+            this.caughtFish = this.add.sprite(277, 136, 'fish', dbFish);
+
+        }else if(this.inventory['7'] === dbFish){
+            this.caughtFish = this.add.sprite(300, 136, 'fish', dbFish);
+
+        }
+
+        this.caughtFish.fixedToCamera = true;
+        this.caughtFish.setScrollFactor(0)
+
+        console.log(inventory);
+    }
+
     //triggered when fish is clicked on
     clickHandler(fish){
-        console.log(inventorySpace)
-        if(inventorySpace === 8){
+ 
+        if(this.inventory['0'] === undefined){
             this.caughtFish = this.add.sprite(231, 112, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
-
-            inventorySpace = inventorySpace - 1;
-            console.log(inventorySpace)
             this.inventory['0'] = newFish;
 
-        }else if(inventorySpace === 7){
+        }else if(this.inventory['1'] === undefined){
             this.caughtFish = this.add.sprite(254, 112, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
             this.inventory['1'] = newFish;
 
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 6){
+        }else if(this.inventory['2'] === undefined){
             this.caughtFish = this.add.sprite(277, 112, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
             this.inventory['2'] = newFish;
 
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 5){
+        }else if(this.inventory['3'] === undefined){
             this.caughtFish = this.add.sprite(300, 112, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
             this.inventory['3'] = newFish;
 
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 4){
+        }else if(this.inventory['4'] === undefined){
             this.caughtFish = this.add.sprite(231, 136, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
             this.inventory['4'] = newFish;
 
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 3){
+        }else if(this.inventory['5'] === undefined){
             this.caughtFish = this.add.sprite(254, 136, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
             this.inventory['5'] = newFish;
 
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 2){
+        }else if(this.inventory['6'] === undefined){
             this.caughtFish = this.add.sprite(277, 136, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
             this.inventory['6'] = newFish;
 
-            inventorySpace = inventorySpace - 1;
-        }else if(inventorySpace === 1){
+        }else if(this.inventory['7'] === undefined){
             this.caughtFish = this.add.sprite(300, 136, 'fish', newFish);
-            this.caughtFish.fixedToCamera = true;
-            this.caughtFish.setScrollFactor(0)
             this.inventory['7'] = newFish;
 
-            inventorySpace = inventorySpace - 1;
         }
-        console.log(inventory);
+
+        this.caughtFish.fixedToCamera = true;
+        this.caughtFish.setScrollFactor(0)
+
         fish.off('clicked', this.clickHandler);
         fish.input.enabled = false;
         fish.setVisible(false);
@@ -685,7 +709,7 @@ class MainMap extends Phaser.Scene {
             currentScene: newScene
         })
         .then(function (response) {
-            console.log(response);
+            //console.log(response);
         })
         .catch(function (error) {
             if (error.response) {
@@ -712,7 +736,7 @@ class MainMap extends Phaser.Scene {
             inventory: inventory
         })
         .then(function (response) {
-            console.log(response);
+            //console.log(response);
         })
         .catch(function (error) {
             if (error.response) {

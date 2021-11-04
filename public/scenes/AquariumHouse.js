@@ -27,9 +27,13 @@ class AquariumHouse extends Phaser.Scene {
         this.CONFIG = this.sys.game.CONFIG;
         this.timer = 0;
 
+        console.log("check inv2: " + this.inventory);
+
         this.initialX = data.x;
         this.initialY = data.y;
         this.inventory = data.inventory;
+
+        console.log("check inv: " + this.inventory);
     }
 
     preload () {
@@ -110,6 +114,12 @@ class AquariumHouse extends Phaser.Scene {
         this.cameras.main.startFollow(this.character);
         this.cameras.main.roundPixels = true;
 
+        this.anims.create({
+            key: 'swim',
+            frames: this.anims.generateFrameNumbers('fish', { frames: [123, 124] }),
+            frameRate: 5,
+        });
+
         //walking right animation (EC)
         this.anims.create({
             key: 'right',
@@ -177,7 +187,11 @@ class AquariumHouse extends Phaser.Scene {
         }
 
         if(this.inventory == undefined) {
-            this.inventory = {};
+            console.log("undef: " + this.inventory);
+            //this.inventory = [];
+        }else{
+            console.log("def inv: " + this.inventory);
+            this.fillInventory();
         }
 
         this.input.on('gameobjectup', function (pointer, gameObject){
@@ -216,6 +230,9 @@ class AquariumHouse extends Phaser.Scene {
         border.fixedToCamera = true;
         border.setScrollFactor(0)
         border.visible = false;
+
+        fish1 = this.physics.add.sprite(140, 35, 'fish', 123);
+        fish1.visible = false;
     }
 
     update (time, delta) {
@@ -278,6 +295,7 @@ class AquariumHouse extends Phaser.Scene {
             this.character.anims.play('up', true);
             aquariumInterface = false;
         }
+
     }
 
     createAquariumInterface(){
@@ -286,20 +304,23 @@ class AquariumHouse extends Phaser.Scene {
             border.visible = false;
             closeAquarium.visible = false;
             Aquainterface.visible = false;
+
             fish1.visible = false;
+
         }else{
 
             border.visible = true;
             closeAquarium.visible = true;
             Aquainterface.visible = true;
+            fish1.visible = true;
 
-            fish1 = this.physics.add.sprite(140, 35, 'fish', 123);
-            fish1.setVelocity(30, 40);
+            fish1.setVelocity(20, 40);
             fish1.setBounce(1, 1);
             fish1.setCollideWorldBounds(true);
             fish1.fixedToCamera = true;
             fish1.setScrollFactor(0)
             fish1.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            //fish1.anims.play('swim', true);
 
         }
 
@@ -308,6 +329,53 @@ class AquariumHouse extends Phaser.Scene {
     clickHandler(closeAquarium){
         activeAquarium = false;
         this.createAquariumInterface();
+    }
+
+    fillInventory(){
+        this.arrayLength = this.inventory.length;
+        for (var i = 0; i < this.arrayLength; i++) {
+            console.log("in inv")
+            if(this.inventory[i] != undefined){
+                console.log(this.inventory);
+                this.addFishToInventory(this.inventory[i]); // call add sprite method here
+            }
+        }
+    }
+
+    //reloads inventory from database
+    addFishToInventory(dbFish){
+        console.log("database: " + this.inventory['0']);
+        console.log("database fish: " + dbFish);
+        if(this.inventory['0'] === dbFish){
+            this.caughtFish = this.physics.add.sprite(140, 35, 'fish', dbFish);
+
+        }else if(this.inventory['1'] === dbFish){
+            this.caughtFish = this.physics.add.sprite(120, 35, 'fish', dbFish);
+
+        }else if(this.inventory['2'] === dbFish){
+            this.caughtFish = this.physics.add.sprite(160, 35, 'fish', dbFish);
+
+        }else if(this.inventory['3'] === dbFish){
+            this.caughtFish = this.physics.add.sprite(140, 55, 'fish', dbFish);
+
+        }else if(this.inventory['4'] === dbFish){
+            this.caughtFish = this.physics.add.sprite(160, 55, 'fish', dbFish);
+
+        }else if(this.inventory['5'] === dbFish){
+            this.caughtFish = this.physics.add.sprite(120, 55, 'fish', dbFish);
+
+        }else if(this.inventory['6'] === dbFish){
+            this.caughtFish = this.physics.add.sprite(180, 35, 'fish', dbFish);
+
+        }else if(this.inventory['7'] === dbFish){
+            this.caughtFish = this.physics.add.sprite(180, 55, 'fish', dbFish);
+
+        }
+
+        this.caughtFish.fixedToCamera = true;
+        this.caughtFish.setScrollFactor(0)
+
+        console.log(inventory);
     }
 
     // resetIcon1(){
@@ -531,7 +599,7 @@ class AquariumHouse extends Phaser.Scene {
             currentScene: newScene
         })
         .then(function (response) {
-            console.log(response);
+            //console.log(response);
         })
         .catch(function (error) {
             if (error.response) {
@@ -558,7 +626,7 @@ class AquariumHouse extends Phaser.Scene {
             inventory: inventory
         })
         .then(function (response) {
-            console.log(response);
+            //console.log(response);
         })
         .catch(function (error) {
             if (error.response) {
