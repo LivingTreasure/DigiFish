@@ -1,15 +1,14 @@
 var timedEvent;
 var text;
-var fishingPossible = false;
-var newFish = 0;
-var lineCast;
+var fishingPossible = false; //checks if within fishing spot
+var newFish = 0; //sprite number of the last fish spawned
+var lineCast;  //if fishing rod thrown
 var houseScene = false;
 var shopScene = false;
 var musicPlaying = false; //whether or not music is playing
 var initialX;
 var initialY;
-var inventory;
-var refresh = false;
+var inventory; //store inventory data
 
 class MainMap extends Phaser.Scene {
     //THIS SCENE IS THE MAIN SCREEN
@@ -20,15 +19,10 @@ class MainMap extends Phaser.Scene {
     init (data) {
         console.log("Start MainMap")
 
-        if (! localStorage.justOnce) {
-            console.log("refreshed")
-            localStorage.setItem("justOnce", "true");
-            window.location.reload();
-        }
-
         this.CONFIG = this.sys.game.CONFIG;
         this.timer = 0;
 
+        //Loads in data from the database
         this.initialX = data.x;
         this.initialY = data.y;
         this.inventory = data.inventory;
@@ -106,7 +100,7 @@ class MainMap extends Phaser.Scene {
         this.physics.add.collider(this.character, water);
         this.physics.add.collider(this.character, objs);
 
-        // this.character.setDepth(10);
+        //sets camera to follow the player
         this.cameras.main.setZoom(1)
         this.cameras.main.startFollow(this.character);
         this.cameras.main.roundPixels = true;
@@ -178,7 +172,6 @@ class MainMap extends Phaser.Scene {
         this.anims.create({
             key: 'pullout',
             frames: this.anims.generateFrameNumbers('character', { frames: [1, 2, 0] }),
-            //frames: [ { key: 'character', frame: 1} ],
             frameRate: 5,
         });
 
@@ -196,12 +189,15 @@ class MainMap extends Phaser.Scene {
         });
 
         this.cursors = this.input.keyboard.createCursorKeys();
+
+        //This is to check if a fish is already spawned
         this.fishCheck = false;
 
         //creates fishing loacation
         this.fishingLocation1 = this.physics.add.staticImage(240, 380, 'uiContainers', 0);
         this.fishingLocation1.visible = false;
-        //makes it possible to fish at fishing location
+
+        //makes it possible to fish at fishing location by checking is the player overlaps the spot
         this.physics.add.overlap(this.fishingLocation1, this.character, function (){
             fishingPossible = true;
         });
@@ -209,6 +205,7 @@ class MainMap extends Phaser.Scene {
         //creates house door hitbox
         this.houseDoor = this.physics.add.staticImage(420, 132, 'uiContainers', 0);
         this.houseDoor.visible = false;
+
         //moves you to house when you walk through the door
         this.physics.add.overlap(this.houseDoor, this.character, function (){
             //OPEN NEW MAP HERE
@@ -219,6 +216,7 @@ class MainMap extends Phaser.Scene {
         //creates shop door hitbox
         this.shopDoor = this.physics.add.staticImage(212, 132, 'uiContainers', 0);
         this.shopDoor.visible = false;
+
         //moves you to shop when you walk through the door
         this.physics.add.overlap(this.shopDoor, this.character, function (){
             //OPEN NEW MAP HERE
@@ -228,26 +226,32 @@ class MainMap extends Phaser.Scene {
 
         //when possible, allows you to fish
         this.input.keyboard.on('keydown-SPACE', function () {
+            //this is checking to see if your within the fishing spot hitbox and a fish isn't already spawned
             if(this.fishCheck == false && fishingPossible == true){
                 lineCast = true;
                 this.fishCheck = true;
                 fishingPossible = false;
 
+                //plays animation and sound
                 this.character.anims.play('throw', true);
                 this.waterDrop.play();
 
+                //this delay controls when they fish spawns after pressing space
                 this.time.addEvent({
                     delay: Phaser.Math.Between(1500, 2000),
                     callback: ()=>{
 
+                        //spawns in a new random fish from the sprite sheet
                         newFish = Phaser.Math.Between(18, 126);
                         this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', newFish);
                         this.fish.setInteractive();
                         this.fish.on('clicked', this.clickHandler, this);
 
+                        //this delay controls how long the fish is active
                         this.time.addEvent({
                             delay: Phaser.Math.Between(1500, 2000),
                             callback: ()=>{
+                                //fish timer has expired
                                 this.fish.visible = false;
                                 this.fish.active = false;
                                 this.fishCheck = false;
@@ -266,6 +270,7 @@ class MainMap extends Phaser.Scene {
             }
         }, this);
 
+        //this is to aide the click function for the fish
         this.input.on('gameobjectup', function (pointer, gameObject){
             gameObject.emit('clicked', gameObject);
         }, this);
@@ -275,22 +280,19 @@ class MainMap extends Phaser.Scene {
             this.character.setY(this.initialY);
         }
 
+        //this is checking if the inventory is empty upon load and fills it if something exists within the database
         if(this.inventory == undefined) {
-            console.log("undef: " + this.inventory);
             this.inventory = [];
         }else{
             this.fillInventory();
-            console.log(this.inventory);
         }
 
-        console.log(this.inventory);
     }
 
     update (time, delta) {
         this.timer += delta;
         while (this.timer > 2000) {
             this.saveMoveToDB();
-            //this.saveInventoryToDB();
             this.timer -= 2000;
         }
 
@@ -298,6 +300,7 @@ class MainMap extends Phaser.Scene {
             houseScene = false;
             this.saveMoveToDB('AquariumHouse', 90, 178);
             this.scene.start('AquariumHouse');
+            //this reload is needed to refresh the database
             window.location.reload();
         }
 
@@ -305,6 +308,7 @@ class MainMap extends Phaser.Scene {
             shopScene = false;
             this.saveMoveToDB('DigiShop', 90, 178);
             this.scene.start('DigiShop');
+            window.location.reload();
         }
 
         this.character.setVelocityX(0);
@@ -322,6 +326,7 @@ class MainMap extends Phaser.Scene {
           }
             this.character.setSize(16,5);
             this.character.body.offset.y = 10;
+            //we set these variables to false here to ensure you cannot fish while walking away from the spot
             fishingPossible = false;
             lineCast = false;
         }
@@ -394,6 +399,7 @@ class MainMap extends Phaser.Scene {
         // }
     }
 
+    //this function loops through all the database items and calls the function to load them
     fillInventory(){
         this.arrayLength = this.inventory.length;
         for (var i = 0; i < this.arrayLength; i++) {
@@ -436,7 +442,7 @@ class MainMap extends Phaser.Scene {
 
     }
 
-    //triggered when fish is clicked on
+    //triggered when fish is clicked on and saves it to the database
     clickHandler(fish){
  
         if(this.inventory['0'] === undefined){
@@ -487,6 +493,7 @@ class MainMap extends Phaser.Scene {
         this.saveInventoryToDB();
     }
 
+    //These functions control the radio buttons for the hook and bait
     resetIcon1(){
         this.hookIcon2.play('hookIconSwitchBack');
         this.hookIcon3.play('hookIconSwitchBack');
@@ -517,6 +524,7 @@ class MainMap extends Phaser.Scene {
         this.baitIcon1.play('hookIconSwitchBack');
     }
 
+    //this creates the user interface
     createUserInterface(){
 
         //Background
@@ -540,6 +548,7 @@ class MainMap extends Phaser.Scene {
         this.border.fixedToCamera = true;
         this.border.setScrollFactor(0)
 
+        //this is using the text prefab class
         this.invTitle = new Text(
             this,
             265,
@@ -586,7 +595,6 @@ class MainMap extends Phaser.Scene {
         this.hookIcon3.setScrollFactor(0);
         this.hookIcon3.on('pointerdown', function (pointer){
             this.play('hookIconSwitch');
-            //this.play('hookIconSwitchBack');
         });
         // Event handler for when the animation completes on our sprite
         this.hookIcon3.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
@@ -697,10 +705,12 @@ class MainMap extends Phaser.Scene {
         this.inventory8.setScrollFactor(0)
     }
 
+    //returns name of the scene to be stored in database
     getSceneName() {
         return 'MainMap';
     }
 
+    //saves position and scene data in the database
     saveMoveToDB(newScene = this.getSceneName(), x = this.character.x, y = this.character.y) {
         axios.post('/api/move', {
             playerX: x,
@@ -730,6 +740,7 @@ class MainMap extends Phaser.Scene {
         });
     }
 
+    //stores inventory information in database
     saveInventoryToDB(inventory = this.inventory) {
         axios.post('/api/inventory', {
             inventory: inventory

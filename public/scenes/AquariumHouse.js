@@ -276,6 +276,7 @@ class AquariumHouse extends Phaser.Scene {
 
             this.character.anims.play('left', true);
             aquariumInterface = false;
+            activeAquarium = false;
         }
         //walk right when pressing right arrow key
         else if (this.cursors.right.isDown){
@@ -285,6 +286,7 @@ class AquariumHouse extends Phaser.Scene {
 
             this.character.anims.play('right', true);
             aquariumInterface = false;
+            activeAquarium = false;
         }
         //walk down when pressing down arrow key
         else if (this.cursors.down.isDown) {
@@ -294,6 +296,7 @@ class AquariumHouse extends Phaser.Scene {
 
             this.character.anims.play('down', true);
             aquariumInterface = false;
+            activeAquarium = false;
         }
         //walk up when pressing up arrow key
         else if (this.cursors.up.isDown) {
@@ -303,6 +306,7 @@ class AquariumHouse extends Phaser.Scene {
 
             this.character.anims.play('up', true);
             aquariumInterface = false;
+            activeAquarium = false;
         }
 
     }
@@ -484,216 +488,6 @@ class AquariumHouse extends Phaser.Scene {
 
         console.log(inventory);
     }
-
-    // resetIcon1(){
-    //     this.hookIcon2.play('hookIconSwitchBack');
-    //     this.hookIcon3.play('hookIconSwitchBack');
-    // }
-    //
-    // resetIcon2(){
-    //     this.hookIcon1.play('hookIconSwitchBack');
-    //     this.hookIcon3.play('hookIconSwitchBack');
-    // }
-    //
-    // resetIcon3(){
-    //     this.hookIcon2.play('hookIconSwitchBack');
-    //     this.hookIcon1.play('hookIconSwitchBack');
-    // }
-    //
-    // resetIcon4(){
-    //     this.baitIcon2.play('hookIconSwitchBack');
-    //     this.baitIcon3.play('hookIconSwitchBack');
-    // }
-    //
-    // resetIcon5(){
-    //     this.baitIcon1.play('hookIconSwitchBack');
-    //     this.baitIcon3.play('hookIconSwitchBack');
-    // }
-    //
-    // resetIcon6(){
-    //     this.baitIcon2.play('hookIconSwitchBack');
-    //     this.baitIcon1.play('hookIconSwitchBack');
-    // }
-    //
-    // createUserInterface(){
-    //
-    //     //Background
-    //     let x = 216;
-    //     let y = 10;
-    //     let w = 100;
-    //     let h = 140;
-    //
-    //     this.interface  = this.add.graphics({x: x, y: y})
-    //     this.border     = this.add.graphics({x: x, y: y})
-    //
-    //     this.interface.clear();
-    //     this.interface.fillStyle('0x965D37', 1);
-    //     this.interface.fillRect(0, 0, w, h);
-    //     this.interface.fixedToCamera = true;
-    //     this.interface.setScrollFactor(0);
-    //
-    //     this.border.clear();
-    //     this.border.lineStyle(2, '0x4D6592', 1);
-    //     this.border.strokeRect(0, 0, w, h);
-    //     this.border.fixedToCamera = true;
-    //     this.border.setScrollFactor(0)
-    //
-    //     this.invTitle = new Text(
-    //         this,
-    //         265,
-    //         19,
-    //         'Hooks',
-    //         'userInterface',
-    //         0.5
-    //     );
-    //     this.invTitle.fixedToCamera = true;
-    //     this.invTitle.setScrollFactor(0);
-    //
-    //     this.hookIcon1 = this.add.sprite(236, 36, 'uiContainers', 0).setInteractive();
-    //     this.hookIcon1.fixedToCamera = true;
-    //     this.hookIcon1.setScrollFactor(0);
-    //     this.hookIcon1.on('pointerdown', function (pointer){
-    //         this.play('hookIconSwitch');
-    //     });
-    //     // Event handler for when the animation completes on our sprite
-    //     this.hookIcon1.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
-    //         this.resetIcon1();
-    //     }, this);
-    //
-    //     this.hook1 = this.add.sprite(236, 36, 'baitAndHooks', 4);
-    //     this.hook1.fixedToCamera = true;
-    //     this.hook1.setScrollFactor(0);
-    //
-    //     this.hookIcon2 = this.add.sprite(266, 36, 'uiContainers', 0).setInteractive();
-    //     this.hookIcon2.fixedToCamera = true;
-    //     this.hookIcon2.setScrollFactor(0);
-    //     this.hookIcon2.on('pointerdown', function (pointer){
-    //         this.play('hookIconSwitch');
-    //     });
-    //     // Event handler for when the animation completes on our sprite
-    //     this.hookIcon2.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
-    //         this.resetIcon2();
-    //     }, this);
-    //
-    //     this.hook2 = this.add.sprite(266, 36, 'baitAndHooks', 9);
-    //     this.hook2.fixedToCamera = true;
-    //     this.hook2.setScrollFactor(0);
-    //
-    //     this.hookIcon3 = this.add.sprite(295, 36, 'uiContainers', 0).setInteractive();
-    //     this.hookIcon3.fixedToCamera = true;
-    //     this.hookIcon3.setScrollFactor(0);
-    //     this.hookIcon3.on('pointerdown', function (pointer){
-    //         this.play('hookIconSwitch');
-    //         //this.play('hookIconSwitchBack');
-    //     });
-    //     // Event handler for when the animation completes on our sprite
-    //     this.hookIcon3.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
-    //         this.resetIcon3();
-    //     }, this);
-    //
-    //     this.hook3 = this.add.sprite(295, 36, 'baitAndHooks', 8);
-    //     this.hook3.fixedToCamera = true;
-    //     this.hook3.setScrollFactor(0)
-    //
-    //     this.invTitle = new Text(
-    //         this,
-    //         265,
-    //         59,
-    //         'Bait',
-    //         'userInterface',
-    //         0.5
-    //     );
-    //     this.invTitle.fixedToCamera = true;
-    //     this.invTitle.setScrollFactor(0);
-    //
-    //     this.baitIcon1 = this.add.sprite(236, 76, 'uiContainers', 0).setInteractive();
-    //     this.baitIcon1.fixedToCamera = true;
-    //     this.baitIcon1.setScrollFactor(0);
-    //     this.baitIcon1.on('pointerdown', function (pointer){
-    //         this.play('hookIconSwitch');
-    //     });
-    //     // Event handler for when the animation completes on our sprite
-    //     this.baitIcon1.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
-    //         this.resetIcon4();
-    //     }, this);
-    //
-    //     this.bait1 = this.add.sprite(236, 76, 'baitAndHooks', 0);
-    //     this.bait1.fixedToCamera = true;
-    //     this.bait1.setScrollFactor(0)
-    //
-    //     this.baitIcon2 = this.add.sprite(266, 76, 'uiContainers', 0).setInteractive();
-    //     this.baitIcon2.fixedToCamera = true;
-    //     this.baitIcon2.setScrollFactor(0);
-    //     this.baitIcon2.on('pointerdown', function (pointer){
-    //         this.play('hookIconSwitch');
-    //     });
-    //     // Event handler for when the animation completes on our sprite
-    //     this.baitIcon2.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
-    //         this.resetIcon5();
-    //     }, this);
-    //
-    //     this.bait2 = this.add.sprite(266, 76, 'baitAndHooks', 1);
-    //     this.bait2.fixedToCamera = true;
-    //     this.bait2.setScrollFactor(0)
-    //
-    //     this.baitIcon3 = this.add.sprite(295, 76, 'uiContainers', 0).setInteractive();
-    //     this.baitIcon3.fixedToCamera = true;
-    //     this.baitIcon3.setScrollFactor(0);
-    //     this.baitIcon3.on('pointerdown', function (pointer){
-    //         this.play('hookIconSwitch');
-    //     });
-    //     // Event handler for when the animation completes on our sprite
-    //     this.baitIcon3.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
-    //         this.resetIcon6();
-    //     }, this);
-    //
-    //     this.invTitle = new Text(
-    //         this,
-    //         265,
-    //         94,
-    //         'Inventory',
-    //         'userInterface',
-    //         0.5
-    //     );
-    //     this.invTitle.fixedToCamera = true;
-    //     this.invTitle.setScrollFactor(0);
-    //
-    //     this.bait3 = this.add.sprite(295, 76, 'baitAndHooks', 2);
-    //     this.bait3.fixedToCamera = true;
-    //     this.bait3.setScrollFactor(0)
-    //
-    //     this.inventory1 = this.add.sprite(231, 136, 'uiContainers', 24);
-    //     this.inventory1.fixedToCamera = true;
-    //     this.inventory1.setScrollFactor(0)
-    //
-    //     this.inventory1 = this.add.sprite(254, 136, 'uiContainers', 24);
-    //     this.inventory1.fixedToCamera = true;
-    //     this.inventory1.setScrollFactor(0)
-    //
-    //     this.inventory1 = this.add.sprite(277, 136, 'uiContainers', 24);
-    //     this.inventory1.fixedToCamera = true;
-    //     this.inventory1.setScrollFactor(0)
-    //
-    //     this.inventory1 = this.add.sprite(300, 136, 'uiContainers', 24);
-    //     this.inventory1.fixedToCamera = true;
-    //     this.inventory1.setScrollFactor(0)
-    //
-    //     this.inventory2 = this.add.sprite(231, 112, 'uiContainers', 24);
-    //     this.inventory2.fixedToCamera = true;
-    //     this.inventory2.setScrollFactor(0)
-    //
-    //     this.inventory1 = this.add.sprite(254, 112, 'uiContainers', 24);
-    //     this.inventory1.fixedToCamera = true;
-    //     this.inventory1.setScrollFactor(0)
-    //
-    //     this.inventory1 = this.add.sprite(277, 112, 'uiContainers', 24);
-    //     this.inventory1.fixedToCamera = true;
-    //     this.inventory1.setScrollFactor(0)
-    //
-    //     this.inventory1 = this.add.sprite(300, 112, 'uiContainers', 24);
-    //     this.inventory1.fixedToCamera = true;
-    //     this.inventory1.setScrollFactor(0)
-    // }
 
     getSceneName() {
         return "AquariumHouse";
