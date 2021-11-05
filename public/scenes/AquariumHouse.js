@@ -12,6 +12,14 @@ var Aquainterface;
 var closeAquarium;
 var activeAquarium = true;
 var fish1;
+var fish2;
+var fish3;
+var fish4;
+var fish6;
+var fish5;
+var fish7;
+var fish8;
+var refresh = false;
 
 
 class AquariumHouse extends Phaser.Scene {
@@ -186,14 +194,6 @@ class AquariumHouse extends Phaser.Scene {
             this.character.setY(this.initialY);
         }
 
-        if(this.inventory == undefined) {
-            console.log("undef: " + this.inventory);
-            //this.inventory = [];
-        }else{
-            console.log("def inv: " + this.inventory);
-            this.fillInventory();
-        }
-
         this.input.on('gameobjectup', function (pointer, gameObject){
             gameObject.emit('clicked', gameObject);
         }, this);
@@ -231,8 +231,16 @@ class AquariumHouse extends Phaser.Scene {
         border.setScrollFactor(0)
         border.visible = false;
 
-        fish1 = this.physics.add.sprite(140, 35, 'fish', 123);
-        fish1.visible = false;
+        //fish1 = this.physics.add.sprite(140, 35, 'fish', 123);
+        //fish1.visible = false;
+
+        if(this.inventory == undefined) {
+            console.log("undef: " + this.inventory);
+            //this.inventory = [];
+        }else{
+            console.log("def inv: " + this.inventory);
+            this.fillInventory();
+        }
     }
 
     update (time, delta) {
@@ -244,7 +252,7 @@ class AquariumHouse extends Phaser.Scene {
         this.timer += delta;
         while (this.timer > 2000) {
             this.saveMoveToDB();
-            this.saveInventoryToDB();
+            //this.saveInventoryToDB();
             this.timer -= 2000;
         }
 
@@ -254,6 +262,7 @@ class AquariumHouse extends Phaser.Scene {
             console.log("Start MainMap");
             this.saveMoveToDB('MainMap', 410, 158);
             this.scene.start('MainMap');
+            window.location.reload();
         }
 
         //console.log("update")
@@ -305,22 +314,60 @@ class AquariumHouse extends Phaser.Scene {
             closeAquarium.visible = false;
             Aquainterface.visible = false;
 
-            fish1.visible = false;
+            if(fish1 !== undefined){
+                fish1.visible = false;
+            }
+            if(fish2 !== undefined){
+                fish2.visible = false;
+            }
+            if(fish3 !== undefined){
+                fish3.visible = false;
+            }
+            if(fish4 !== undefined){
+                fish4.visible = false;
+            }
+            if(fish5 !== undefined){
+                fish5.visible = false;
+            }
+            if(fish6 !== undefined){
+                fish6.visible = false;
+            }
+            if(fish7 !== undefined){
+                fish7.visible = false;
+            }
+            if(fish8 !== undefined){
+                fish8.visible = false;
+            }
 
         }else{
 
             border.visible = true;
             closeAquarium.visible = true;
             Aquainterface.visible = true;
-            fish1.visible = true;
-
-            fish1.setVelocity(20, 40);
-            fish1.setBounce(1, 1);
-            fish1.setCollideWorldBounds(true);
-            fish1.fixedToCamera = true;
-            fish1.setScrollFactor(0)
-            fish1.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
-            //fish1.anims.play('swim', true);
+            if(fish1 !== undefined){
+                fish1.visible = true;
+            }
+            if(fish2 !== undefined){
+                fish2.visible = true;
+            }
+            if(fish3 !== undefined){
+                fish3.visible = true;
+            }
+            if(fish4 !== undefined){
+                fish4.visible = true;
+            }
+            if(fish5 !== undefined){
+                fish5.visible = true;
+            }
+            if(fish6 !== undefined){
+                fish6.visible = true;
+            }
+            if(fish7 !== undefined){
+                fish7.visible = true;
+            }
+            if(fish8 !== undefined){
+                fish8.visible = true;
+            }
 
         }
 
@@ -334,7 +381,6 @@ class AquariumHouse extends Phaser.Scene {
     fillInventory(){
         this.arrayLength = this.inventory.length;
         for (var i = 0; i < this.arrayLength; i++) {
-            console.log("in inv")
             if(this.inventory[i] != undefined){
                 console.log(this.inventory);
                 this.addFishToInventory(this.inventory[i]); // call add sprite method here
@@ -347,33 +393,94 @@ class AquariumHouse extends Phaser.Scene {
         console.log("database: " + this.inventory['0']);
         console.log("database fish: " + dbFish);
         if(this.inventory['0'] === dbFish){
-            this.caughtFish = this.physics.add.sprite(140, 35, 'fish', dbFish);
+            fish1 = this.physics.add.sprite(140, 35, 'fish', dbFish);
+
+            fish1.setVelocity(Phaser.Math.Between(5, 60), Phaser.Math.Between(5, 60));
+            fish1.setBounce(1, 1);
+            fish1.setCollideWorldBounds(true);
+            fish1.fixedToCamera = true;
+            fish1.setScrollFactor(0)
+            fish1.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            fish1.visible = false;
 
         }else if(this.inventory['1'] === dbFish){
-            this.caughtFish = this.physics.add.sprite(120, 35, 'fish', dbFish);
+            fish2 = this.physics.add.sprite(120, 35, 'fish', dbFish);
+
+            fish2.setVelocity(Phaser.Math.Between(5, 60), Phaser.Math.Between(5, 60));
+            fish2.setBounce(1, 1);
+            fish2.setCollideWorldBounds(true);
+            fish2.fixedToCamera = true;
+            fish2.setScrollFactor(0)
+            fish2.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            fish2.visible = false;
 
         }else if(this.inventory['2'] === dbFish){
-            this.caughtFish = this.physics.add.sprite(160, 35, 'fish', dbFish);
+            fish3 = this.physics.add.sprite(160, 35, 'fish', dbFish);
+
+            fish3.setVelocity(Phaser.Math.Between(5, 60), Phaser.Math.Between(5, 60));
+            fish3.setBounce(1, 1);
+            fish3.setCollideWorldBounds(true);
+            fish3.fixedToCamera = true;
+            fish3.setScrollFactor(0)
+            fish3.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            fish3.visible = false;
 
         }else if(this.inventory['3'] === dbFish){
-            this.caughtFish = this.physics.add.sprite(140, 55, 'fish', dbFish);
+            fish4 = this.physics.add.sprite(140, 55, 'fish', dbFish);
+
+            fish4.setVelocity(Phaser.Math.Between(5, 60), Phaser.Math.Between(5, 60));
+            fish4.setBounce(1, 1);
+            fish4.setCollideWorldBounds(true);
+            fish4.fixedToCamera = true;
+            fish4.setScrollFactor(0)
+            fish4.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            fish4.visible = false;
 
         }else if(this.inventory['4'] === dbFish){
-            this.caughtFish = this.physics.add.sprite(160, 55, 'fish', dbFish);
+            fish5 = this.physics.add.sprite(160, 55, 'fish', dbFish);
+
+            fish5.setVelocity(Phaser.Math.Between(5, 60), Phaser.Math.Between(5, 60));
+            fish5.setBounce(1, 1);
+            fish5.setCollideWorldBounds(true);
+            fish5.fixedToCamera = true;
+            fish5.setScrollFactor(0)
+            fish5.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            fish5.visible = false;
 
         }else if(this.inventory['5'] === dbFish){
-            this.caughtFish = this.physics.add.sprite(120, 55, 'fish', dbFish);
+            fish6 = this.physics.add.sprite(120, 55, 'fish', dbFish);
+
+            fish6.setVelocity(Phaser.Math.Between(5, 60), Phaser.Math.Between(5, 60));
+            fish6.setBounce(1, 1);
+            fish6.setCollideWorldBounds(true);
+            fish6.fixedToCamera = true;
+            fish6.setScrollFactor(0)
+            fish6.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            fish6.visible = false;
 
         }else if(this.inventory['6'] === dbFish){
-            this.caughtFish = this.physics.add.sprite(180, 35, 'fish', dbFish);
+            fish7 = this.physics.add.sprite(180, 35, 'fish', dbFish);
+
+            fish7.setVelocity(Phaser.Math.Between(5, 60), Phaser.Math.Between(5, 60));
+            fish7.setBounce(1, 1);
+            fish7.setCollideWorldBounds(true);
+            fish7.fixedToCamera = true;
+            fish7.setScrollFactor(0)
+            fish7.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            fish7.visible = false;
 
         }else if(this.inventory['7'] === dbFish){
-            this.caughtFish = this.physics.add.sprite(180, 55, 'fish', dbFish);
+            fish8 = this.physics.add.sprite(180, 55, 'fish', dbFish);
+
+            fish8.setVelocity(Phaser.Math.Between(5, 60), Phaser.Math.Between(5, 60));
+            fish8.setBounce(1, 1);
+            fish8.setCollideWorldBounds(true);
+            fish8.fixedToCamera = true;
+            fish8.setScrollFactor(0)
+            fish8.body.setBoundsRectangle(new Phaser.Geom.Rectangle(60, 30, 200, 100));
+            fish8.visible = false;
 
         }
-
-        this.caughtFish.fixedToCamera = true;
-        this.caughtFish.setScrollFactor(0)
 
         console.log(inventory);
     }

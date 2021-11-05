@@ -9,7 +9,7 @@ var musicPlaying = false; //whether or not music is playing
 var initialX;
 var initialY;
 var inventory;
-
+var refresh = false;
 
 class MainMap extends Phaser.Scene {
     //THIS SCENE IS THE MAIN SCREEN
@@ -19,6 +19,12 @@ class MainMap extends Phaser.Scene {
 
     init (data) {
         console.log("Start MainMap")
+
+        if (! localStorage.justOnce) {
+            console.log("refreshed")
+            localStorage.setItem("justOnce", "true");
+            window.location.reload();
+        }
 
         this.CONFIG = this.sys.game.CONFIG;
         this.timer = 0;
@@ -284,7 +290,7 @@ class MainMap extends Phaser.Scene {
         this.timer += delta;
         while (this.timer > 2000) {
             this.saveMoveToDB();
-            this.saveInventoryToDB();
+            //this.saveInventoryToDB();
             this.timer -= 2000;
         }
 
@@ -292,6 +298,7 @@ class MainMap extends Phaser.Scene {
             houseScene = false;
             this.saveMoveToDB('AquariumHouse', 90, 178);
             this.scene.start('AquariumHouse');
+            window.location.reload();
         }
 
         if(shopScene){
@@ -387,18 +394,9 @@ class MainMap extends Phaser.Scene {
         // }
     }
 
-    houseScene(){
-        this.scene.start('Preload');
-    }
-
-    shopScene(){
-        this.scene.start('Preload');
-    }
-
     fillInventory(){
         this.arrayLength = this.inventory.length;
         for (var i = 0; i < this.arrayLength; i++) {
-            console.log("in inv")
             if(this.inventory[i] != undefined){
                 this.addFishToInventory(this.inventory[i]); // call add sprite method here
             }
@@ -436,7 +434,6 @@ class MainMap extends Phaser.Scene {
         this.caughtFish.fixedToCamera = true;
         this.caughtFish.setScrollFactor(0)
 
-        console.log(inventory);
     }
 
     //triggered when fish is clicked on
@@ -486,6 +483,8 @@ class MainMap extends Phaser.Scene {
           this.character.anims.play('pullout', true);
           lineCast = false;
         }
+
+        this.saveInventoryToDB();
     }
 
     resetIcon1(){
