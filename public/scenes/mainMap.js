@@ -299,7 +299,7 @@ class MainMap extends Phaser.Scene {
         if(houseScene){
             houseScene = false;
             this.saveMoveToDB('AquariumHouse', 90, 178);
-            this.scene.start('AquariumHouse');
+            this.scene.start('AquariumHouse', {inventory: inventory});
             //this reload is needed to refresh the database
             window.location.reload();
         }
@@ -307,7 +307,7 @@ class MainMap extends Phaser.Scene {
         if(shopScene){
             shopScene = false;
             this.saveMoveToDB('DigiShop', 160, 150);
-            this.scene.start('DigiShop');
+            this.scene.start('DigiShop', {inventory: inventory});
             window.location.reload();
         }
 
