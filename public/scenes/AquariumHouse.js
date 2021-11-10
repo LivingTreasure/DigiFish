@@ -22,6 +22,7 @@ var fish8;
 var refresh = false;
 
 
+
 class AquariumHouse extends Phaser.Scene {
     //THIS SCENE IS THE HOUSE SCREEN
     constructor () {
@@ -64,8 +65,7 @@ class AquariumHouse extends Phaser.Scene {
         this.load.tilemapTiledJSON('mapHome', 'assets/json/AquariumHouse.json')
 
         // load audio
-        this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
-        this.load.audio('music', 'assets/Audio/Reality.mp3');
+        this.load.audio('music', 'assets/Audio/HouseMusic.mp3');
     }
 
     async create () {
@@ -96,7 +96,6 @@ class AquariumHouse extends Phaser.Scene {
         this.character.setSize(16, 5);
 
         //adds music
-        this.waterDrop = this.sound.add('water_drop');
         this.music = this.sound.add('music');
         var musicConfig = {
           mute: false,
@@ -106,6 +105,10 @@ class AquariumHouse extends Phaser.Scene {
           seek: 0,
           loop: true,
           delay: 0
+        }
+        if(musicPlaying == false){
+            this.music.play(musicConfig);
+            musicPlaying = true;
         }
 
         //makes character collide with walls and items
