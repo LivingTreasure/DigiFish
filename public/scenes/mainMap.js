@@ -75,7 +75,6 @@ class MainMap extends Phaser.Scene {
 
         //configures music
         this.waterDrop = this.sound.add('water_drop');
-        musicPlaying = false;
         this.music = this.sound.add('music');
         var musicConfig = {
           mute: false,
@@ -204,7 +203,7 @@ class MainMap extends Phaser.Scene {
         });
 
         //creates house door hitbox
-        this.houseDoor = this.physics.add.staticImage(212, 132, 'uiContainers', 0);
+        this.houseDoor = this.physics.add.staticImage(420, 132, 'uiContainers', 0);
         this.houseDoor.visible = false;
 
         //moves you to house when you walk through the door
@@ -215,7 +214,7 @@ class MainMap extends Phaser.Scene {
         });
 
         //creates shop door hitbox
-        this.shopDoor = this.physics.add.staticImage(420, 132, 'uiContainers', 0);
+        this.shopDoor = this.physics.add.staticImage(212, 132, 'uiContainers', 0);
         this.shopDoor.visible = false;
 
         //moves you to shop when you walk through the door
@@ -445,7 +444,7 @@ class MainMap extends Phaser.Scene {
 
     //triggered when fish is clicked on and saves it to the database
     clickHandler(fish){
-
+ 
         if(this.inventory['0'] === undefined){
             this.caughtFish = this.add.sprite(231, 112, 'fish', newFish);
             this.inventory['0'] = newFish;

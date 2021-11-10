@@ -7,7 +7,6 @@ var initialX;
 var initialY;
 var inventory;
 
-
 class DigiShop extends Phaser.Scene {
     //THIS SCENE IS THE SHOP SCREEN
     constructor () {
@@ -41,9 +40,9 @@ class DigiShop extends Phaser.Scene {
         this.load.tilemapTiledJSON('mapStore', 'assets/json/DigiShop.json')
 
         // load audio
-        this.load.audio('music', 'assets/Audio/StoreMusic.mp3');
+        this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
+        this.load.audio('music', 'assets/Audio/Reality.mp3');
     }
-
 
     async create () {
         //makes map
@@ -70,6 +69,7 @@ class DigiShop extends Phaser.Scene {
 //        this.lineCast = true;
 
         //adds music
+        this.waterDrop = this.sound.add('water_drop');
         this.music = this.sound.add('music');
         var musicConfig = {
           mute: false,
@@ -80,10 +80,7 @@ class DigiShop extends Phaser.Scene {
           loop: true,
           delay: 0
         }
-        if(musicPlaying == false){
-            this.music.play(musicConfig);
-            musicPlaying = true;
-        }
+//        this.music.play(musicConfig);
 
        this.createUserInterface();
 
@@ -197,7 +194,6 @@ class DigiShop extends Phaser.Scene {
             console.log("Start MainMap");
             this.saveMoveToDB('MainMap', 410, 158);
             this.scene.start('MainMap');
-            window.location.reload();
         }
 
         //console.log("update")
