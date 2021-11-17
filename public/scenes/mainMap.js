@@ -308,6 +308,7 @@ class MainMap extends Phaser.Scene {
             shopScene = false;
             this.saveMoveToDB('DigiShop', 160, 150);
             this.scene.start('DigiShop', {inventory: inventory});
+            //this reload is needed to refresh the database
             window.location.reload();
         }
 

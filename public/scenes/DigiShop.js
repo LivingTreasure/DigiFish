@@ -6,6 +6,12 @@ var houseScene = false;
 var initialX;
 var initialY;
 var inventory;
+var activeShop = false;
+var ShopInterface = false;
+var closeShop;
+var shopBackground;
+var border;
+var shopTitle;
 
 class DigiShop extends Phaser.Scene {
     //THIS SCENE IS THE SHOP SCREEN
@@ -178,9 +184,76 @@ class DigiShop extends Phaser.Scene {
             this.character.setX(this.initialX);
             this.character.setY(this.initialY);
         }
+
+        this.input.on('gameobjectup', function (pointer, gameObject){
+            gameObject.emit('clicked', gameObject);
+        }, this);
+
+        //this is checking if the inventory is empty upon load and fills it if something exists within the database
+        if(this.inventory == undefined) {
+            this.inventory = [];
+        }else{
+            this.fillInventory();
+        }
+
+        this.shop = this.physics.add.staticImage(195, 88, 'uiContainers', 0);
+        this.shop.visible = false;
+        this.physics.add.overlap(this.shop, this.character, function (){
+            //Create shop interface
+            ShopInterface = true;
+            activeShop = true;
+        });
+
+        //BUILDS SHOP
+        let x = 5;
+        let y = 10;
+        let w = 200;
+        let h = 100;
+
+        shopBackground   = this.add.graphics({x: x, y: y})
+        border          = this.add.graphics({x: x, y: y})
+
+        closeShop = this.add.sprite(205, 10, 'guiIcons', 27);
+        closeShop.setInteractive();
+        closeShop.on('clicked', this.clickHandler, this);
+        closeShop.visible = false;
+
+        closeShop.fixedToCamera = true;
+        closeShop.setScrollFactor(0);
+
+        this.shopTitle = new Text(
+            this,
+            100,
+            20,
+            'Shop',
+            'userInterface',
+            0.5
+        );
+        this.shopTitle.fixedToCamera = true;
+        this.shopTitle.setScrollFactor(0);
+
+
+        shopBackground.clear();
+        shopBackground.fillStyle('0x965D37', 1);
+        shopBackground.fillRect(0, 0, w, h);
+        shopBackground.fixedToCamera = true;
+        shopBackground.setScrollFactor(0);
+        shopBackground.visible = false;
+
+        border.clear();
+        border.lineStyle(2, '0x4D6592', 1);
+        border.strokeRect(0, 0, w, h);
+        border.fixedToCamera = true;
+        border.setScrollFactor(0)
+        border.visible = false;
     }
 
     update (time, delta) {
+
+        if(ShopInterface){
+            this.createShopInterface();
+        }
+
         this.timer += delta;
         while (this.timer > 2000) {
             this.saveMoveToDB();
@@ -231,6 +304,66 @@ class DigiShop extends Phaser.Scene {
 
             this.character.anims.play('up', true);
         }
+    }
+
+    createShopInterface(){
+        if(!activeShop){
+            border.visible = false;
+            closeShop.visible = false;
+            shopBackground.visible = false;
+        }else{
+            border.visible = true;
+            closeShop.visible = true;
+            shopBackground.visible = true;
+        }
+    }
+
+    clickHandler(closeShop){
+        activeShop = false;
+        this.createShopInterface();
+    }
+
+    //this function loops through all the database items and calls the function to load them
+    fillInventory(){
+        this.arrayLength = this.inventory.length;
+        for (var i = 0; i < this.arrayLength; i++) {
+            if(this.inventory[i] != undefined){
+                this.addFishToInventory(this.inventory[i]); // call add sprite method here
+            }
+        }
+    }
+
+    //reloads inventory from database
+    addFishToInventory(dbFish){
+        if(this.inventory['0'] === dbFish){
+            this.caughtFish = this.add.sprite(231, 112, 'fish', dbFish);
+
+        }else if(this.inventory['1'] === dbFish){
+            this.caughtFish = this.add.sprite(254, 112, 'fish', dbFish);
+
+        }else if(this.inventory['2'] === dbFish){
+            this.caughtFish = this.add.sprite(277, 112, 'fish', dbFish);
+
+        }else if(this.inventory['3'] === dbFish){
+            this.caughtFish = this.add.sprite(300, 112, 'fish', dbFish);
+
+        }else if(this.inventory['4'] === dbFish){
+            this.caughtFish = this.add.sprite(231, 136, 'fish', dbFish);
+
+        }else if(this.inventory['5'] === dbFish){
+            this.caughtFish = this.add.sprite(254, 136, 'fish', dbFish);
+
+        }else if(this.inventory['6'] === dbFish){
+            this.caughtFish = this.add.sprite(277, 136, 'fish', dbFish);
+
+        }else if(this.inventory['7'] === dbFish){
+            this.caughtFish = this.add.sprite(300, 136, 'fish', dbFish);
+
+        }
+
+        this.caughtFish.fixedToCamera = true;
+        this.caughtFish.setScrollFactor(0)
+
     }
 
     resetIcon1(){
