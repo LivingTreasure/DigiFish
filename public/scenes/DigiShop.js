@@ -221,7 +221,7 @@ class DigiShop extends Phaser.Scene {
         closeShop.fixedToCamera = true;
         closeShop.setScrollFactor(0);
 
-        this.shopTitle = new Text(
+        shopTitle = new Text(
             this,
             100,
             20,
@@ -229,8 +229,9 @@ class DigiShop extends Phaser.Scene {
             'userInterface',
             0.5
         );
-        this.shopTitle.fixedToCamera = true;
-        this.shopTitle.setScrollFactor(0);
+        shopTitle.fixedToCamera = true;
+        shopTitle.setScrollFactor(0);
+        shopTitle.visible = false;
 
 
         shopBackground.clear();
@@ -265,8 +266,10 @@ class DigiShop extends Phaser.Scene {
         if(mainScene){
             mainScene = false;
             console.log("Start MainMap");
-            this.saveMoveToDB('MainMap', 410, 158);
-            this.scene.start('MainMap');
+            this.saveMoveToDB('MainMap', 210, 160);
+            this.scene.start('MainMap', {x:210, y:160});
+            //this reload is needed to refresh the database
+            window.location.reload();
         }
 
         //console.log("update")
@@ -311,10 +314,13 @@ class DigiShop extends Phaser.Scene {
             border.visible = false;
             closeShop.visible = false;
             shopBackground.visible = false;
+            shopTitle.visible = false;
         }else{
             border.visible = true;
             closeShop.visible = true;
             shopBackground.visible = true;
+            shopTitle.visible = true;
+
         }
     }
 
