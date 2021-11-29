@@ -9,6 +9,8 @@ var musicPlaying = false; //whether or not music is playing
 var initialX;
 var initialY;
 var inventory; //store inventory data
+var hook;
+var bait;
 
 class MainMap extends Phaser.Scene {
     //THIS SCENE IS THE MAIN SCREEN
@@ -242,7 +244,41 @@ class MainMap extends Phaser.Scene {
                     callback: ()=>{
 
                         //spawns in a new random fish from the sprite sheet
-                        newFish = Phaser.Math.Between(18, 126);
+
+                        if(this.hook == 1){
+                          if(this.bait == 1){
+                            newFish = Phaser.Math.Between(18, 29);
+                          }else if(this.bait == 2){
+                            newFish = Phaser.Math.Between(30, 41);
+                          }else if(this.bait == 3){
+                            newFish = Phaser.Math.Between(42, 53);
+                          }else{
+                            newFish = Phaser.Math.Between(18, 131);
+                          }
+                        }else if(this.hook == 2){
+                          if(this.bait == 1){
+                            newFish = Phaser.Math.Between(54, 65);
+                          }else if(this.bait == 2){
+                            newFish = Phaser.Math.Between(66, 77);
+                          }else if(this.bait == 3){
+                            newFish = Phaser.Math.Between(78, 89);
+                          }else{
+                            newFish = Phaser.Math.Between(18, 131);
+                          }
+                        }else if(this.hook == 3){
+                          if(this.bait == 1){
+                            newFish = Phaser.Math.Between(90, 107);
+                          }else if(this.bait == 2){
+                            newFish = Phaser.Math.Between(108, 125);
+                          }else if(this.bait == 3){
+                            newFish = Phaser.Math.Between(90, 131);
+                          }else{
+                            newFish = Phaser.Math.Between(18, 131);
+                          }
+                        }else{
+                          newFish = Phaser.Math.Between(18, 131);
+                        }
+
                         this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', newFish);
                         this.fish.setInteractive();
                         this.fish.on('clicked', this.clickHandler, this);
@@ -445,7 +481,7 @@ class MainMap extends Phaser.Scene {
 
     //triggered when fish is clicked on and saves it to the database
     clickHandler(fish){
- 
+
         if(this.inventory['0'] === undefined){
             this.caughtFish = this.add.sprite(231, 112, 'fish', newFish);
             this.inventory['0'] = newFish;
@@ -569,6 +605,7 @@ class MainMap extends Phaser.Scene {
         });
         // Event handler for when the animation completes on our sprite
         this.hookIcon1.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+          this.hook = 1;
             this.resetIcon1();
         }, this);
 
@@ -584,6 +621,7 @@ class MainMap extends Phaser.Scene {
         });
         // Event handler for when the animation completes on our sprite
         this.hookIcon2.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.hook = 2
             this.resetIcon2();
         }, this);
 
@@ -599,6 +637,7 @@ class MainMap extends Phaser.Scene {
         });
         // Event handler for when the animation completes on our sprite
         this.hookIcon3.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.hook = 3;
             this.resetIcon3();
         }, this);
 
@@ -625,6 +664,7 @@ class MainMap extends Phaser.Scene {
         });
         // Event handler for when the animation completes on our sprite
         this.baitIcon1.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.bait = 1;
             this.resetIcon4();
         }, this);
 
@@ -640,6 +680,7 @@ class MainMap extends Phaser.Scene {
         });
         // Event handler for when the animation completes on our sprite
         this.baitIcon2.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.bait = 2;
             this.resetIcon5();
         }, this);
 
@@ -655,6 +696,7 @@ class MainMap extends Phaser.Scene {
         });
         // Event handler for when the animation completes on our sprite
         this.baitIcon3.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hookIconSwitch', function () {
+            this.bait = 3;
             this.resetIcon6();
         }, this);
 
