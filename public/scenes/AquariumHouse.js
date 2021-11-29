@@ -64,8 +64,7 @@ class AquariumHouse extends Phaser.Scene {
         this.load.tilemapTiledJSON('mapHome', 'assets/json/AquariumHouse.json')
 
         // load audio
-        this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
-        this.load.audio('music', 'assets/Audio/Reality.mp3');
+        this.load.audio('music', 'assets/Audio/HouseMusic.mp3');
     }
 
     async create () {
@@ -96,7 +95,6 @@ class AquariumHouse extends Phaser.Scene {
         this.character.setSize(16, 5);
 
         //adds music
-        this.waterDrop = this.sound.add('water_drop');
         this.music = this.sound.add('music');
         var musicConfig = {
           mute: false,
@@ -107,6 +105,7 @@ class AquariumHouse extends Phaser.Scene {
           loop: true,
           delay: 0
         }
+        this.music.play(musicConfig);
 
         //makes character collide with walls and items
         walls.setCollisionByProperty({ collides: true });

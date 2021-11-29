@@ -47,7 +47,7 @@ class DigiShop extends Phaser.Scene {
 
         // load audio
         this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
-        this.load.audio('music', 'assets/Audio/Reality.mp3');
+        this.load.audio('music', 'assets/Audio/Store.mp3');
     }
 
     async create () {
@@ -86,7 +86,7 @@ class DigiShop extends Phaser.Scene {
           loop: true,
           delay: 0
         }
-//        this.music.play(musicConfig);
+        this.music.play(musicConfig);
 
        this.createUserInterface();
 
