@@ -37,6 +37,11 @@ class Preload extends Phaser.Scene {
             frameHeight: 16
         })
 
+        this.load.spritesheet('coin', 'assets/GUI_Pack/Icons/Coins_16x16.png', {
+            frameWidth: 16,
+            frameHeight: 16
+        })
+
 
     }
 

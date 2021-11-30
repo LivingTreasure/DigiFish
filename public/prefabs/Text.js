@@ -1,3 +1,4 @@
+var price = 'Price: ' + Math.floor((Math.random() * 100) + 1);
 class Text {
     constructor(ctx, x, y, string, style, origin){
         this.ctx = ctx //contect, which scene it belongs to
@@ -76,9 +77,20 @@ class Text {
 
     }
 
-    setText (String){
-        this.text = string;
-        this.obj.setText(string);
+    setText (){
+        this.text = ' ';
+        this.obj.setText(' ');
+    }
+
+    setShop(){
+        this.text = 'Shop';
+        this.obj.setText('Shop');
+    }
+
+    setPrice(){
+        this.fontSize = 8;
+        this.text = price;
+        this.obj.setText(price);
     }
 
     setX (x) {

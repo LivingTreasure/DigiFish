@@ -12,6 +12,38 @@ var closeShop;
 var shopBackground;
 var border;
 var shopTitle;
+var fishShop1
+var fishShop2
+var fishShop3
+var fishShop4
+var fishShop5
+var fishShop6
+var fishShop7
+var fishShop8
+var shopFish1
+var shopFish2
+var shopFish3
+var shopFish4
+var shopFish5
+var shopFish6
+var shopFish7
+var shopFish8
+var fishSell1
+var fishSell2
+var fishSell3
+var fishSell4
+var fishSell5
+var fishSell6
+var fishSell7
+var fishSell8
+var invFish1
+var invFish2
+var invFish3
+var invFish4
+var invFish5
+var invFish6
+var invFish7
+var invFish8
 
 class DigiShop extends Phaser.Scene {
     //THIS SCENE IS THE SHOP SCREEN
@@ -161,25 +193,6 @@ class DigiShop extends Phaser.Scene {
             mainScene = true;
         });
 
-        // this.input.keyboard.on('keydown-SPACE', function () {
-        //     if(this.fishCheck == false && fishingPossible == true){
-        //         this.fishCheck = true;
-        //         fishingPossible = false;
-        //         this.fish = this.add.sprite(Phaser.Math.Between(225, 245), Phaser.Math.Between(385, 405), 'fish', Phaser.Math.Between(18, 126));
-        //
-        //         this.time.addEvent({
-        //             delay: Phaser.Math.Between(1500, 2000),
-        //             callback: ()=>{
-        //                 this.fish.visible = false;
-        //                 this.fish.active = false;
-        //                 this.fishCheck = false;
-        //                 fishingPossible = false;
-        //             },
-        //             loop: false
-        //         })
-        //     }
-        // }, this);
-
         if(this.initialX != undefined && this.initialY != undefined) {
             this.character.setX(this.initialX);
             this.character.setY(this.initialY);
@@ -188,13 +201,6 @@ class DigiShop extends Phaser.Scene {
         this.input.on('gameobjectup', function (pointer, gameObject){
             gameObject.emit('clicked', gameObject);
         }, this);
-
-        //this is checking if the inventory is empty upon load and fills it if something exists within the database
-        if(this.inventory == undefined) {
-            this.inventory = [];
-        }else{
-            this.fillInventory();
-        }
 
         this.shop = this.physics.add.staticImage(195, 88, 'uiContainers', 0);
         this.shop.visible = false;
@@ -231,7 +237,7 @@ class DigiShop extends Phaser.Scene {
         );
         shopTitle.fixedToCamera = true;
         shopTitle.setScrollFactor(0);
-        shopTitle.visible = false;
+        shopTitle.setText();
 
 
         shopBackground.clear();
@@ -247,6 +253,109 @@ class DigiShop extends Phaser.Scene {
         border.fixedToCamera = true;
         border.setScrollFactor(0)
         border.visible = false;
+
+        fishShop1 = this.add.sprite(35, 50, 'uiContainers', 24);
+        fishShop2 = this.add.sprite(35, 90, 'uiContainers', 24);
+        fishShop3 = this.add.sprite(80, 50, 'uiContainers', 24);
+        fishShop4 = this.add.sprite(80, 90, 'uiContainers', 24);
+        fishShop5 = this.add.sprite(125, 50, 'uiContainers', 24);
+        fishShop6 = this.add.sprite(125, 90, 'uiContainers', 24);
+        fishShop7 = this.add.sprite(170, 50, 'uiContainers', 24);
+        fishShop8 = this.add.sprite(170, 90, 'uiContainers', 24);
+
+        fishShop1.fixedToCamera = true;
+        fishShop1.setScrollFactor(0)
+        fishShop2.fixedToCamera = true;
+        fishShop2.setScrollFactor(0)
+        fishShop3.fixedToCamera = true;
+        fishShop3.setScrollFactor(0)
+        fishShop4.fixedToCamera = true;
+        fishShop4.setScrollFactor(0)
+        fishShop5.fixedToCamera = true;
+        fishShop5.setScrollFactor(0)
+        fishShop6.fixedToCamera = true;
+        fishShop6.setScrollFactor(0)
+        fishShop7.fixedToCamera = true;
+        fishShop7.setScrollFactor(0)
+        fishShop8.fixedToCamera = true;
+        fishShop8.setScrollFactor(0)
+
+        fishShop1.visible = false;
+        fishShop2.visible = false;
+        fishShop3.visible = false;
+        fishShop4.visible = false;
+        fishShop5.visible = false;
+        fishShop6.visible = false;
+        fishShop7.visible = false;
+        fishShop8.visible = false;
+
+        fishSell1 = this.add.sprite(38, 30, 'coin', 11);
+        fishSell2 = this.add.sprite(38, 70, 'coin', 11);
+        fishSell3 = this.add.sprite(82, 30, 'coin', 11);
+        fishSell4 = this.add.sprite(82, 70, 'coin', 11);
+        fishSell5 = this.add.sprite(127, 30, 'coin', 11);
+        fishSell6 = this.add.sprite(127, 70, 'coin', 11);
+        fishSell7 = this.add.sprite(172, 30, 'coin', 11);
+        fishSell8 = this.add.sprite(172, 70, 'coin', 11);
+
+        fishSell1.fixedToCamera = true;
+        fishSell1.setScrollFactor(0);
+        fishSell2.fixedToCamera = true;
+        fishSell2.setScrollFactor(0);
+        fishSell3.fixedToCamera = true;
+        fishSell3.setScrollFactor(0);
+        fishSell4.fixedToCamera = true;
+        fishSell4.setScrollFactor(0);
+        fishSell5.fixedToCamera = true;
+        fishSell5.setScrollFactor(0);
+        fishSell6.fixedToCamera = true;
+        fishSell6.setScrollFactor(0);
+        fishSell7.fixedToCamera = true;
+        fishSell7.setScrollFactor(0);
+        fishSell8.fixedToCamera = true;
+        fishSell8.setScrollFactor(0);
+
+        fishSell1.visible = false;
+        fishSell2.visible = false;
+        fishSell3.visible = false;
+        fishSell4.visible = false;
+        fishSell5.visible = false;
+        fishSell6.visible = false;
+        fishSell7.visible = false;
+        fishSell8.visible = false;
+
+        fishSell1.setInteractive();
+        fishSell1.on('clicked', this.sellOne, this);
+
+        fishSell2.setInteractive();
+        fishSell2.on('clicked', this.sellTwo, this);
+
+        fishSell3.setInteractive();
+        fishSell3.on('clicked', this.sellThree, this);
+
+        fishSell4.setInteractive();
+        fishSell4.on('clicked', this.sellFour, this);
+
+        fishSell5.setInteractive();
+        fishSell5.on('clicked', this.sellFive, this);
+
+        fishSell6.setInteractive();
+        fishSell6.on('clicked', this.sellSix, this);
+
+        fishSell7.setInteractive();
+        fishSell7.on('clicked', this.sellSeven, this);
+
+        fishSell8.setInteractive();
+        fishSell8.on('clicked', this.sellEight, this);
+
+        //this is checking if the inventory is empty upon load and fills it if something exists within the database
+        if(this.inventory == undefined) {
+            this.inventory = [];
+        }else{
+            this.fillInventory();
+        }
+
+
     }
 
     update (time, delta) {
@@ -314,12 +423,110 @@ class DigiShop extends Phaser.Scene {
             border.visible = false;
             closeShop.visible = false;
             shopBackground.visible = false;
-            shopTitle.visible = false;
+            shopTitle.setText();
+            fishShop1.visible = false;
+            fishShop2.visible = false;
+            fishShop3.visible = false;
+            fishShop4.visible = false;
+            fishShop5.visible = false;
+            fishShop6.visible = false;
+            fishShop7.visible = false;
+            fishShop8.visible = false;
+
+            if(this.inventory['0'] != null){
+                shopFish1.visible = false;
+            }
+
+            if(this.inventory['1'] != null){
+                shopFish2.visible = false;
+            }
+
+            if(this.inventory['2'] != null){
+                shopFish3.visible = false;
+            }
+
+            if(this.inventory['3'] != null){
+                shopFish4.visible = false;
+            }
+
+            if(this.inventory['4'] != null){
+                shopFish5.visible = false;
+            }
+
+            if(this.inventory['5'] != null){
+                shopFish6.visible = false;
+            }
+
+            if(this.inventory['6'] != null){
+                shopFish7.visible = false;
+            }
+
+            if(this.inventory['7'] != null){
+                shopFish8.visible = false;
+            }
+
+            fishSell1.visible = false;
+            fishSell2.visible = false;
+            fishSell3.visible = false;
+            fishSell4.visible = false;
+            fishSell5.visible = false;
+            fishSell6.visible = false;
+            fishSell7.visible = false;
+            fishSell8.visible = false;
         }else{
             border.visible = true;
             closeShop.visible = true;
             shopBackground.visible = true;
-            shopTitle.visible = true;
+            shopTitle.setShop();
+            fishShop1.visible = true;
+            fishShop2.visible = true;
+            fishShop3.visible = true;
+            fishShop4.visible = true;
+            fishShop5.visible = true;
+            fishShop6.visible = true;
+            fishShop7.visible = true;
+            fishShop8.visible = true;
+
+            if(this.inventory['0'] != null){
+                shopFish1.visible = true;
+            }
+
+            if(this.inventory['1'] != null){
+                shopFish2.visible = true;
+            }
+
+            if(this.inventory['2'] != null){
+                shopFish3.visible = true;
+            }
+
+            if(this.inventory['3'] != null){
+                shopFish4.visible = true;
+            }
+
+            if(this.inventory['4'] != null){
+                shopFish5.visible = true;
+            }
+
+            if(this.inventory['5'] != null){
+                shopFish6.visible = true;
+            }
+
+            if(this.inventory['6'] != null){
+                shopFish7.visible = true;
+            }
+
+            if(this.inventory['7'] != null){
+                shopFish8.visible = true;
+            }
+
+            fishSell1.visible = true;
+            fishSell2.visible = true;
+            fishSell3.visible = true;
+            fishSell4.visible = true;
+            fishSell5.visible = true;
+            fishSell6.visible = true;
+            fishSell7.visible = true;
+            fishSell8.visible = true;
 
         }
     }
@@ -329,12 +536,69 @@ class DigiShop extends Phaser.Scene {
         this.createShopInterface();
     }
 
+    sellOne(sellFish1){
+        this.inventory['0'] = null;
+        shopFish1.visible = false;
+        invFish1.visible = false;
+        this.saveInventoryToDB();
+    }
+
+    sellTwo(sellFish2){
+        this.inventory['1'] = null;
+        shopFish2.visible = false;
+        invFish2.visible = false;
+        this.saveInventoryToDB();
+    }
+
+    sellThree(sellFish3){
+        this.inventory['2'] = null;
+        shopFish3.visible = false;
+        invFish3.visible = false;
+        this.saveInventoryToDB();
+    }
+
+    sellFour(sellFish1){
+        this.inventory['3'] = null;
+        shopFish4.visible = false;
+        invFish4.visible = false;
+        this.saveInventoryToDB();
+    }
+
+    sellFive(sellFish1){
+        this.inventory['4'] = null;
+        shopFish5.visible = false;
+        invFish5.visible = false;
+        this.saveInventoryToDB();
+    }
+
+    sellSix(sellFish1){
+        this.inventory['5'] = null;
+        shopFish6.visible = false;
+        invFish6.visible = false;
+        this.saveInventoryToDB();
+    }
+
+    sellSeven(sellFish1){
+        this.inventory['6'] = null;
+        shopFish7.visible = false;
+        invFish7.visible = false;
+        this.saveInventoryToDB();
+    }
+
+    sellEight(sellFish1){
+        this.inventory['7'] = null;
+        shopFish8.visible = false;
+        invFish8.visible = false;
+        this.saveInventoryToDB();
+    }
+
     //this function loops through all the database items and calls the function to load them
     fillInventory(){
         this.arrayLength = this.inventory.length;
         for (var i = 0; i < this.arrayLength; i++) {
             if(this.inventory[i] != undefined){
                 this.addFishToInventory(this.inventory[i]); // call add sprite method here
+                this.addFishToShop(this.inventory[i]); // call add sprite method here
             }
         }
     }
@@ -342,33 +606,100 @@ class DigiShop extends Phaser.Scene {
     //reloads inventory from database
     addFishToInventory(dbFish){
         if(this.inventory['0'] === dbFish){
-            this.caughtFish = this.add.sprite(231, 112, 'fish', dbFish);
+            invFish1 = this.add.sprite(231, 112, 'fish', dbFish);
+            invFish1.fixedToCamera = true;
+            invFish1.setScrollFactor(0)
 
         }else if(this.inventory['1'] === dbFish){
-            this.caughtFish = this.add.sprite(254, 112, 'fish', dbFish);
+            invFish2 = this.add.sprite(254, 112, 'fish', dbFish);
+            invFish2.fixedToCamera = true;
+            invFish2.setScrollFactor(0)
 
         }else if(this.inventory['2'] === dbFish){
-            this.caughtFish = this.add.sprite(277, 112, 'fish', dbFish);
+            invFish3 = this.add.sprite(277, 112, 'fish', dbFish);
+            invFish3.fixedToCamera = true;
+            invFish3.setScrollFactor(0)
 
         }else if(this.inventory['3'] === dbFish){
-            this.caughtFish = this.add.sprite(300, 112, 'fish', dbFish);
+            invFish4 = this.add.sprite(300, 112, 'fish', dbFish);
+            invFish4.fixedToCamera = true;
+            invFish4.setScrollFactor(0)
 
         }else if(this.inventory['4'] === dbFish){
-            this.caughtFish = this.add.sprite(231, 136, 'fish', dbFish);
+            invFish5 = this.add.sprite(231, 136, 'fish', dbFish);
+            invFish5.fixedToCamera = true;
+            invFish5.setScrollFactor(0)
 
         }else if(this.inventory['5'] === dbFish){
-            this.caughtFish = this.add.sprite(254, 136, 'fish', dbFish);
+            invFish6 = this.add.sprite(254, 136, 'fish', dbFish);
+            invFish6.fixedToCamera = true;
+            invFish6.setScrollFactor(0)
 
         }else if(this.inventory['6'] === dbFish){
-            this.caughtFish = this.add.sprite(277, 136, 'fish', dbFish);
+            invFish7 = this.add.sprite(277, 136, 'fish', dbFish);
+            invFish7.fixedToCamera = true;
+            invFish7.setScrollFactor(0)
 
         }else if(this.inventory['7'] === dbFish){
-            this.caughtFish = this.add.sprite(300, 136, 'fish', dbFish);
+            invFish8 = this.add.sprite(300, 136, 'fish', dbFish);
+            invFish8.fixedToCamera = true;
+            invFish8.setScrollFactor(0)
 
         }
 
-        this.caughtFish.fixedToCamera = true;
-        this.caughtFish.setScrollFactor(0)
+    }
+
+    //reloads shop from database
+    addFishToShop(dbFish){
+        if(this.inventory['0'] === dbFish){
+            shopFish1 = this.add.sprite(35, 50, 'fish', dbFish);
+            shopFish1.visible = false;
+            shopFish1.fixedToCamera = true;
+            shopFish1.setScrollFactor(0)
+
+        }else if(this.inventory['1'] === dbFish){
+            shopFish2 = this.add.sprite(35, 90, 'fish', dbFish);
+            shopFish2.visible = false;
+            shopFish2.fixedToCamera = true;
+            shopFish2.setScrollFactor(0)
+
+        }else if(this.inventory['2'] === dbFish){
+            shopFish3 = this.add.sprite(80, 50, 'fish', dbFish);
+            shopFish3.visible = false;
+            shopFish3.fixedToCamera = true;
+            shopFish3.setScrollFactor(0)
+
+        }else if(this.inventory['3'] === dbFish){
+            shopFish4 = this.add.sprite(80, 90, 'fish', dbFish);
+            shopFish4.visible = false;
+            shopFish4.fixedToCamera = true;
+            shopFish4.setScrollFactor(0)
+
+        }else if(this.inventory['4'] === dbFish){
+            shopFish5 = this.add.sprite(125, 50, 'fish', dbFish);
+            shopFish5.visible = false;
+            shopFish5.fixedToCamera = true;
+            shopFish5.setScrollFactor(0)
+
+        }else if(this.inventory['5'] === dbFish){
+            shopFish6 = this.add.sprite(125, 90, 'fish', dbFish);
+            shopFish6.visible = false;
+            shopFish6.fixedToCamera = true;
+            shopFish6.setScrollFactor(0)
+
+        }else if(this.inventory['6'] === dbFish){
+            shopFish7 = this.add.sprite(170, 50, 'fish', dbFish);
+            shopFish7.visible = false;
+            shopFish7.fixedToCamera = true;
+            shopFish7.setScrollFactor(0)
+
+        }else if(this.inventory['7'] === dbFish){
+            shopFish8 = this.add.sprite(170, 90, 'fish', dbFish);
+            shopFish8.visible = false;
+            shopFish8.fixedToCamera = true;
+            shopFish8.setScrollFactor(0)
+
+        }
 
     }
 

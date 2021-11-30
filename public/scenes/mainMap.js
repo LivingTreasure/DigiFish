@@ -318,7 +318,7 @@ class MainMap extends Phaser.Scene {
 
         //this is checking if the inventory is empty upon load and fills it if something exists within the database
         if(this.inventory == undefined) {
-            this.inventory = [];
+            this.inventory = [null,null,null,null,null,null,null,null];
         }else{
             this.fillInventory();
         }
@@ -482,35 +482,35 @@ class MainMap extends Phaser.Scene {
     //triggered when fish is clicked on and saves it to the database
     clickHandler(fish){
 
-        if(this.inventory['0'] === undefined){
+        if(this.inventory['0'] === null){
             this.caughtFish = this.add.sprite(231, 112, 'fish', newFish);
             this.inventory['0'] = newFish;
 
-        }else if(this.inventory['1'] === undefined){
+        }else if(this.inventory['1'] === null){
             this.caughtFish = this.add.sprite(254, 112, 'fish', newFish);
             this.inventory['1'] = newFish;
 
-        }else if(this.inventory['2'] === undefined){
+        }else if(this.inventory['2'] === null){
             this.caughtFish = this.add.sprite(277, 112, 'fish', newFish);
             this.inventory['2'] = newFish;
 
-        }else if(this.inventory['3'] === undefined){
+        }else if(this.inventory['3'] === null){
             this.caughtFish = this.add.sprite(300, 112, 'fish', newFish);
             this.inventory['3'] = newFish;
 
-        }else if(this.inventory['4'] === undefined){
+        }else if(this.inventory['4'] === null){
             this.caughtFish = this.add.sprite(231, 136, 'fish', newFish);
             this.inventory['4'] = newFish;
 
-        }else if(this.inventory['5'] === undefined){
+        }else if(this.inventory['5'] === null){
             this.caughtFish = this.add.sprite(254, 136, 'fish', newFish);
             this.inventory['5'] = newFish;
 
-        }else if(this.inventory['6'] === undefined){
+        }else if(this.inventory['6'] === null){
             this.caughtFish = this.add.sprite(277, 136, 'fish', newFish);
             this.inventory['6'] = newFish;
 
-        }else if(this.inventory['7'] === undefined){
+        }else if(this.inventory['7'] === null){
             this.caughtFish = this.add.sprite(300, 136, 'fish', newFish);
             this.inventory['7'] = newFish;
 
