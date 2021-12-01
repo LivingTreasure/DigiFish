@@ -523,6 +523,7 @@ class MainMap extends Phaser.Scene {
         fish.input.enabled = false;
         fish.setVisible(false);
         if(lineCast == true){
+          this.waterDrop.play();
           this.character.anims.play('pullout', true);
           lineCast = false;
         }

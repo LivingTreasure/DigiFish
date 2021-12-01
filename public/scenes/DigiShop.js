@@ -78,7 +78,7 @@ class DigiShop extends Phaser.Scene {
         this.load.tilemapTiledJSON('mapStore', 'assets/json/DigiShop.json')
 
         // load audio
-        this.load.audio('water_drop', 'assets/Audio/WaterDrop.mp3');
+        this.load.audio('cash_register', 'assets/Audio/CashRegister.mp3');
         this.load.audio('music', 'assets/Audio/Store.mp3');
     }
 
@@ -107,7 +107,7 @@ class DigiShop extends Phaser.Scene {
 //        this.lineCast = true;
 
         //adds music
-        this.waterDrop = this.sound.add('water_drop');
+        this.cashRegister = this.sound.add('cash_register');
         this.music = this.sound.add('music');
         var musicConfig = {
           mute: false,
@@ -537,6 +537,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     sellOne(sellFish1){
+        this.cashRegister.play();
         this.inventory['0'] = null;
         shopFish1.visible = false;
         invFish1.visible = false;
@@ -544,6 +545,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     sellTwo(sellFish2){
+        this.cashRegister.play();
         this.inventory['1'] = null;
         shopFish2.visible = false;
         invFish2.visible = false;
@@ -551,6 +553,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     sellThree(sellFish3){
+        this.cashRegister.play();
         this.inventory['2'] = null;
         shopFish3.visible = false;
         invFish3.visible = false;
@@ -558,6 +561,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     sellFour(sellFish1){
+        this.cashRegister.play();
         this.inventory['3'] = null;
         shopFish4.visible = false;
         invFish4.visible = false;
@@ -565,6 +569,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     sellFive(sellFish1){
+        this.cashRegister.play();
         this.inventory['4'] = null;
         shopFish5.visible = false;
         invFish5.visible = false;
@@ -572,6 +577,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     sellSix(sellFish1){
+        this.cashRegister.play();
         this.inventory['5'] = null;
         shopFish6.visible = false;
         invFish6.visible = false;
@@ -579,6 +585,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     sellSeven(sellFish1){
+        this.cashRegister.play();
         this.inventory['6'] = null;
         shopFish7.visible = false;
         invFish7.visible = false;
@@ -586,6 +593,7 @@ class DigiShop extends Phaser.Scene {
     }
 
     sellEight(sellFish1){
+        this.cashRegister.play();
         this.inventory['7'] = null;
         shopFish8.visible = false;
         invFish8.visible = false;
